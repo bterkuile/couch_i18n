@@ -57,3 +57,11 @@ And in _config/authorization_rules.rb_ put your personalized version of:
 Beware that a permission denied message will appear when the server is restarted
 this way. This is because the current user is set in ApplicationController which
 is not part of the CouchI18n controller stack.
+
+== TODO
+Here my todo list for this project. Makes it insightful for everybody what is on
+the planning of being made.
+* Check on locale inclusion with are you sure? force creation of new locale. Mostly a stupic mistake omitting these.
+* Add grouped deletes. Dangerous, but controllable using the declarative_authorization example
+* Add grouped search/replaces to move one group of translations to another section. Same comment as above
+* Search through values. If anyone has a better idea than searching by ruby through all the translations or adding lucene please feel free.
