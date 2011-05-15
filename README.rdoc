@@ -14,6 +14,7 @@ following content:
   = render :template => '/layouts/application'
 Or create your own really nice template. Let me know if there is a nice layout!
 Your Gemfile should look like:
+  gem 'simply_stored', :git => 'git://github.com/bterkuile/simply_stored.git'
   gem 'couch_i18n'
   gem 'kaminari'
 And in your config routes put:
