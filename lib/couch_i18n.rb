@@ -7,6 +7,7 @@ module CouchI18n
     raise "I18.backend not a I18n::Backend::Chain" unless I18n.backend.is_a?(I18n::Backend::Chain)
     # 
     yml_backend = I18n.backend.backends.last
+
     raise "Last backend not a I18n::Backend::Simple" unless yml_backend.is_a?(I18n::Backend::Simple)
     yml_backend.load_translations
     flattened_hash = traverse_flatten_keys({}, yml_backend.send(:translations))
@@ -14,7 +15,6 @@ module CouchI18n
       CouchI18n::Store.create :key => key, :value => value
     end
   end
-  private
 
   # Recursive flattening.
   def self.traverse_flatten_keys(store, obj, path = nil)
@@ -22,10 +22,10 @@ module CouchI18n
     when Hash
      obj.each{|k, v| traverse_flatten_keys(store, v, [path, k].compact.join('.'))}
     when Array
-      store[path.underscore.tr(' ', '_')] = obj.to_json
+      store[path] = obj.to_json
       #obj.each_with_index{|v, i| traverse_flatten_keys(store, v, [path, i].compact.join('.'))}
     else
-      store[path.underscore.tr(' ', '_')] = obj
+      store[path] = obj
     end
     return store
   end
