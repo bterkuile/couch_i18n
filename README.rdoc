@@ -30,3 +30,30 @@ Or to put is at a different location:
 The intention is to make this a mountable application, but this will not happen 
 before Rails 3.1 is officially out. But beware of using this if your application
 will not be Rails 3.1 compatible.
+
+== Security!!!
+By default there is no security activated for editing the translation. This is 
+a choice since you should be in control over your own security. To help you 
+securing the translations in your application I will describe the steps I did
+to add declarative_authorization security into the translation. Start with an
+initializer: _config/initializers/couch_I18n_modifications.rb_
+  require 'couch_i18n/application_controller'
+  module CouchI18n
+    class ApplicationController
+      def current_user
+        Authorization.current_user
+      end
+      include Authorization::AuthorizationInController
+      filter_access_to :all
+      def permission_denied
+        redirect_to root_path, :alert => I18n.t('authorization.not_authorized')
+      end
+    end
+  end
+And in _config/authorization_rules.rb_ put your personalized version of:
+  role :translator do
+    has_permission_on :couch_i18n_stores, :to => :manage
+  end
+Beware that a permission denied message will appear when the server is restarted
+this way. This is because the current user is set in ApplicationController which
+is not part of the CouchI18n controller stack.

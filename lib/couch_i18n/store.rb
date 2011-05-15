@@ -31,7 +31,7 @@ module CouchI18n
     end
 
     def self.get_keys_by_level(level = 0, options = {})
-      data = database.view(with_key_array(options.merge(:group => true, :group_level => level.succ)))["rows"]
+      data = database.view(with_key_array(options.merge(:group_level => level.succ)))["rows"]
       # data = data.select{|h| h["key"].size > level } # Only select ones that have a deeper nesting
       data.map{|h| h['key'][level].try(:to_sym)}.compact
     end

@@ -30,3 +30,6 @@ module CouchI18n
     return store
   end
 end
+
+# Now extend the I18n backend
+I18n.backend = I18n::Backend::Chain.new(I18n::Backend::KeyValue.new(CouchI18n::Store), I18n.backend)
