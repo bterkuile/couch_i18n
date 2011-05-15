@@ -1,0 +1,31 @@
+= CouchI18n
+
+This projects is created to make translations editable. It is created using
+the simply_stored gem. To use the web frontend please read the README section
+on this carefully. Important to know is that this system sits *on top* of the
+standard YAML translation system. To import all yml translations to the CouchDB
+database type:
+  CouchI18n::Store.import_from_yaml
+Now all translations are ported to the database. If you change then now in the
+yaml files, they will nolonger be displayed in the website. They should be managed
+in the database. This gem also provides a translation management system. To place this
+in your own design, create a file _app/views/layouts/couch_i18n/application.html.haml_ with the 
+following content:
+  = render :template => '/layouts/application'
+Or create your own really nice template. Let me know if there is a nice layout!
+Your Gemfile should look like:
+  gem 'couch_i18n'
+  gem 'kaminari'
+And in your config routes put:
+  namespace :couch_i18n do
+    root :to => "stores#index"
+    resources :stores
+  end
+Or to put is at a different location:
+  namespace :translations, :module => :couch_i18n, :as => 'couch_i18n' do
+    root :to => "stores#index"
+    resources :stores
+  end
+The intention is to make this a mountable application, but this will not happen 
+before Rails 3.1 is officially out. But beware of using this if your application
+will not be Rails 3.1 compatible.

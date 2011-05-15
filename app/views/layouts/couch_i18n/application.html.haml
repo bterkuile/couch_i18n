@@ -1,0 +1,12 @@
+!!!
+%html
+  %head
+    %title= defined?(site_title) ? site_title : I18n.t('couch_i18n.store.site_title')
+    = csrf_meta_tag
+    = yield :head
+  %body
+    #page-wrapper
+      #page-content
+        %h1= yield :title
+        = yield
+        #page-links= yield :page_links
