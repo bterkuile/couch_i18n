@@ -1,0 +1,31 @@
+- title t("couch_i18n.store.Index title")
+- for offset in @available_higher_offsets
+  = link_to offset[:name], :offset => offset[:offset]
+= form_tag({}, :method => :get )do
+  - if params[:offset].present?
+    = link_to 'x', :offset => nil
+  = text_field_tag :offset, params[:offset], :size => 60
+  = "(#{@couch_i18n_stores.total_entries})"
+  = submit_tag 'Select offset'
+- for offset in @available_deeper_offsets
+  = link_to offset[:name], :offset => offset[:offset]
+- if @couch_i18n_stores.any?
+  = paginate @couch_i18n_stores, :right => 3, :left => 3
+  %table.index-table
+    %thead
+      %tr
+        %th= CouchI18n::Store.human_attribute_name(:key)
+        %th= CouchI18n::Store.human_attribute_name(:value)
+        %th
+    %tbody
+      - @couch_i18n_stores.each do |couch_i18n_store|
+        %tr
+          %td= link_to couch_i18n_store.key[(params[:offset].try(:size) || 0)..-1].sub(/^\./, ''), edit_couch_i18n_store_path(couch_i18n_store)
+          %td= link_to couch_i18n_store.value, edit_couch_i18n_store_path(couch_i18n_store)
+          %td= link_to link_to_edit_content(couch_i18n_store), edit_couch_i18n_store_path(couch_i18n_store)
+          %td= link_to link_to_destroy_content(couch_i18n_store),couch_i18n_store_path(couch_i18n_store), :confirm => are_you_sure, :method => :delete
+- else
+  %h3= t("couch_i18n_store.None found")
+
+- content_for :page_links do
+  = link_to link_to_new_content(:couch_i18n_store), new_couch_i18n_store_path(:offset => params[:offset])
