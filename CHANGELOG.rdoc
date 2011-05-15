@@ -1,6 +1,9 @@
 = CHANGELOG
 == 0.0.3 (....)
 * CouchI18n.import_from_yaml does not underscore the keys anymore
+* Better redirects for keys with spaces and dashes
+* Caching! Huge performance gain
+* Fixed ranges query for keys with spaces
 
 == 0.0.2 (2011-05-15)
 * May be seen as initial, many fixes

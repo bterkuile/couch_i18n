@@ -58,6 +58,7 @@ module CouchI18n
 
     def reload_i18n
       I18n.reload!
+      I18n.cache_store.clear if I18n.respond_to?(:cache_store) && I18n.cache_store.respond_to?(:clear)
     end
   end
 end

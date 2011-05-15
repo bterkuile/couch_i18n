@@ -11,7 +11,7 @@ module CouchI18n
             :offset => @levels[0..i].join('.')
           }
         end
-        @couch_i18n_stores = CouchI18n::Store.find_all_by_key(params[:offset]..(params[:offset] + '\u9999'), :page => params[:page], :per_page => 30)
+        @couch_i18n_stores = CouchI18n::Store.find_all_by_key("#{params[:offset]}.".."#{params[:offset]}.\u9999", :page => params[:page], :per_page => 30)
         @available_deeper_offsets = CouchI18n::Store.get_keys_by_level(@levels.size, :startkey => @levels, :endkey => @levels + [{}]).
           map{|dl| {:name => dl, :offset => [params[:offset], dl].join('.')}}
       else
@@ -32,7 +32,7 @@ module CouchI18n
     def create
       @couch_i18n_store = CouchI18n::Store.new params[:couch_i18n_store]
       if @couch_i18n_store.save
-        redirect_to({:action => :index, :offset => @couch_i18n_store.key.to_s.sub(/\.\w+$/, '')}, :notice => I18n.t('action.create.successful', :model => CouchI18n::Store.model_name.human))
+        redirect_to({:action => :index, :offset => @couch_i18n_store.key.to_s.sub(/\.[\w\s-]+$/, '')}, :notice => I18n.t('action.create.successful', :model => CouchI18n::Store.model_name.human))
       else
         render :action => :new
       end
@@ -43,7 +43,7 @@ module CouchI18n
     def update
       @couch_i18n_store = CouchI18n::Store.find(params[:id])
       if @couch_i18n_store.update_attributes(params[:couch_i18n_store])
-        redirect_to({:action => :index, :offset => @couch_i18n_store.key.to_s.sub(/\.\w+$/, '')}, :notice => I18n.t('action.update.successful', :model => CouchI18n::Store.model_name.human))
+        redirect_to({:action => :index, :offset => @couch_i18n_store.key.to_s.sub(/\.[\w\s-]+$/, '')}, :notice => I18n.t('action.update.successful', :model => CouchI18n::Store.model_name.human))
       else
         render :action => :edit
       end
