@@ -56,5 +56,14 @@ module CouchI18n
       end
       redirect_to({:action => :index, :offset => @couch_i18n_store.key.to_s.sub(/\.\w+$/, '')})
     end
+
+    def export
+      if params[:offset].present?
+        @couch_i18n_stores = CouchI18n::Store.find_all_by_key("#{params[:offset]}.".."#{params[:offset]}.\u9999", :page => params[:page], :per_page => 30)
+      else
+        @couch_i18n_stores = CouchI18n::Store.all
+      end
+      render :text => CouchI18n.indent_keys(@couch_i18n_stores).to_yaml
+    end
   end
 end

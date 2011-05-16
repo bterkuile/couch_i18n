@@ -1,14 +1,22 @@
 - title t("couch_i18n.store.Index title")
-- for offset in @available_higher_offsets
-  = link_to offset[:name], :offset => offset[:offset]
-= form_tag({}, :method => :get )do
-  - if params[:offset].present?
-    = link_to 'x', :offset => nil
-  = text_field_tag :offset, params[:offset], :size => 60
-  = "(#{@couch_i18n_stores.total_entries})"
-  = submit_tag 'Select offset'
-- for offset in @available_deeper_offsets
-  = link_to offset[:name], :offset => offset[:offset]
+.export-form
+  = form_tag :action => :export do
+    = hidden_field_tag :offset, params[:offset]
+    = submit_tag 'Export'
+.offset-navigation-block.block
+  .offset-navigation-higher
+    - for offset in @available_higher_offsets
+      = link_to offset[:name], :offset => offset[:offset]
+  .offset-navigation-form
+    = form_tag({}, :method => :get )do
+      - if params[:offset].present?
+        = link_to 'x', :offset => nil
+      = text_field_tag :offset, params[:offset], :size => 60
+      = "(#{@couch_i18n_stores.total_entries})"
+      = submit_tag 'Select offset'
+  .offset-navigation-deeper
+    - for offset in @available_deeper_offsets
+      = link_to offset[:name], :offset => offset[:offset]
 - if @couch_i18n_stores.any?
   = paginate @couch_i18n_stores, :right => 3, :left => 3
   %table.index-table

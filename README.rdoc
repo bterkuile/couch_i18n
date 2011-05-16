@@ -20,12 +20,22 @@ Your Gemfile should look like:
 And in your config routes put:
   namespace :couch_i18n do
     root :to => "stores#index"
-    resources :stores
+    resources :stores do
+      collection do
+        post :export
+        post :import
+      end
+    end
   end
 Or to put is at a different location:
   namespace :translations, :module => :couch_i18n, :as => 'couch_i18n' do
     root :to => "stores#index"
-    resources :stores
+    resources :stores do
+      collection do
+        post :export
+        post :import
+      end
+    end
   end
 The intention is to make this a mountable application, but this will not happen 
 before Rails 3.1 is officially out. But beware of using this if your application
@@ -52,7 +62,7 @@ initializer: _config/initializers/couch_I18n_modifications.rb_
   end
 And in _config/authorization_rules.rb_ put your personalized version of:
   role :translator do
-    has_permission_on :couch_i18n_stores, :to => :manage
+    has_permission_on :couch_i18n_stores, :to => [:manage, :import, :export]
   end
 Beware that a permission denied message will appear when the server is restarted
 this way. This is because the current user is set in ApplicationController which
@@ -65,3 +75,4 @@ the planning of being made.
 * Add grouped deletes. Dangerous, but controllable using the declarative_authorization example
 * Add grouped search/replaces to move one group of translations to another section. Same comment as above
 * Search through values. If anyone has a better idea than searching by ruby through all the translations or adding lucene please feel free.
+* Good import export functionality

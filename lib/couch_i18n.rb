@@ -24,12 +24,34 @@ module CouchI18n
     when Hash
      obj.each{|k, v| traverse_flatten_keys(store, v, [path, k].compact.join('.'))}
     when Array
-      store[path] = obj.to_json
-      #obj.each_with_index{|v, i| traverse_flatten_keys(store, v, [path, i].compact.join('.'))}
+      # Do not store array for now. There is no good solution yet
+      # store[path] = obj # Keeyp arrays intact
+      # store[path] = obj.to_json
+      # obj.each_with_index{|v, i| traverse_flatten_keys(store, v, [path, i].compact.join('.'))}
     else
       store[path] = obj
     end
     return store
+  end
+
+  # This will return an indented strucutre of a collection of stores. If no argument is given
+  # by default all the translations are indented. So a command:
+  #   CouchI18n.indent_keys.to_yaml will return one big yaml string of the translations
+  def self.indent_keys(selection = Store.all)
+    traverse_indent_keys({}, selection.map{|kv| [kv.key.split('.'), kv.value]})
+  end
+
+  # Traversing helper for indent_keys
+  def self.traverse_indent_keys(h, ary)
+    for pair in ary
+      if pair.first.size == 1
+        h[pair.first.first] = pair.last
+      else
+        h[pair.first.first] ||= {}
+        traverse_indent_keys(h[pair.first.first], [[pair.first[1..-1], pair.last]])
+      end
+    end
+    h
   end
 end
 
