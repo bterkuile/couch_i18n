@@ -63,7 +63,45 @@ module CouchI18n
       else
         @couch_i18n_stores = CouchI18n::Store.all
       end
-      render :text => CouchI18n.indent_keys(@couch_i18n_stores).to_yaml
+      base_filename = "export#{Time.now.strftime('%Y%m%d%H%M')}"
+      if params[:exportformat] == 'csv'
+        response.headers['Content-Type'] = 'text/csv'
+        response.headers['Content-Disposition'] = %{attachment; filename="#{base_filename}.csv"}
+        render :text => @couch_i18n_stores.map{|s| [s.key, s.value.to_json].join(',')}.join("\n")
+      elsif params[:exportformat] == 'json'
+        response.headers['Content-Type'] = 'application/json'
+        response.headers['Content-Disposition'] = %{attachment; filename="#{base_filename}.json"}
+        # render :text => CouchI18n.indent_keys(@couch_i18n_stores).to_json # for indented json
+        render :json => @couch_i18n_stores.map{|s| {s.key, s.value}}.to_json
+      else #yaml
+        response.headers['Content-Type'] = 'application/x-yaml'
+        response.headers['Content-Disposition'] = %{attachment; filename="#{base_filename}.yml"}
+        render :text => CouchI18n.indent_keys(@couch_i18n_stores).to_yaml
+      end
+    end
+
+    def import
+      redirect_to({:action => :index, :offset => params[:offset]}, :alert => I18n.t('couch_i18n.store.no import file given')) and return unless params[:importfile].present?
+      filename = params[:importfile].original_filename
+      extension = filename.sub(/.*\./, '')
+      if extension == 'yml'
+        hash = YAML.load_file(params[:importfile].tempfile.path) rescue nil
+        redirect_to({:action => :index, :offset => params[:offset]}, :alert => I18n.t('couch_i18n.store.cannot parse yaml')) and return unless hash
+        CouchI18n.traverse_flatten_keys(hash).each do |key, value|
+          existing = CouchI18n::Store.find_by_key(key)
+          if existing
+            if existing.value != value
+              existing.value = value
+              existing.save
+            end
+          else
+            CouchI18n::Store.create :key => key, :value => value
+          end
+        end 
+      else
+        redirect_to({:action => :index, :offset => params[:offset]}, :alert => I18n.t('couch_i18n.store.no proper import extension', :extension => extension)) and return 
+      end
+      redirect_to({:action => :index, :offset => params[:offset]}, :notice => I18n.t('couch_i18n.store.file imported'))
     end
   end
 end

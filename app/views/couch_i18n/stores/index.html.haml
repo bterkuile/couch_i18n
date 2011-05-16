@@ -1,7 +1,12 @@
 - title t("couch_i18n.store.Index title")
+.import-form
+  = form_tag({:action => :import}, :multipart => true) do
+    = file_field_tag :importfile
+    = submit_tag 'Import'
 .export-form
   = form_tag :action => :export do
     = hidden_field_tag :offset, params[:offset]
+    = select_tag :exportformat, options_for_select(%w[yml csv json], params[:exportformat])
     = submit_tag 'Export'
 .offset-navigation-block.block
   .offset-navigation-higher

@@ -12,17 +12,17 @@ module CouchI18n
 
     raise "Last backend not a I18n::Backend::Simple" unless yml_backend.is_a?(I18n::Backend::Simple)
     yml_backend.load_translations
-    flattened_hash = traverse_flatten_keys({}, yml_backend.send(:translations))
+    flattened_hash = traverse_flatten_keys(yml_backend.send(:translations))
     flattened_hash.each do |key, value|
       CouchI18n::Store.create :key => key, :value => value
     end
   end
 
   # Recursive flattening.
-  def self.traverse_flatten_keys(store, obj, path = nil)
+  def self.traverse_flatten_keys(obj, store = {}, path = nil)
     case obj
     when Hash
-     obj.each{|k, v| traverse_flatten_keys(store, v, [path, k].compact.join('.'))}
+     obj.each{|k, v| traverse_flatten_keys(v, store, [path, k].compact.join('.'))}
     when Array
       # Do not store array for now. There is no good solution yet
       # store[path] = obj # Keeyp arrays intact
@@ -38,17 +38,17 @@ module CouchI18n
   # by default all the translations are indented. So a command:
   #   CouchI18n.indent_keys.to_yaml will return one big yaml string of the translations
   def self.indent_keys(selection = Store.all)
-    traverse_indent_keys({}, selection.map{|kv| [kv.key.split('.'), kv.value]})
+    traverse_indent_keys(selection.map{|kv| [kv.key.split('.'), kv.value]})
   end
 
   # Traversing helper for indent_keys
-  def self.traverse_indent_keys(h, ary)
+  def self.traverse_indent_keys(ary, h = {})
     for pair in ary
       if pair.first.size == 1
         h[pair.first.first] = pair.last
       else
         h[pair.first.first] ||= {}
-        traverse_indent_keys(h[pair.first.first], [[pair.first[1..-1], pair.last]])
+        traverse_indent_keys([[pair.first[1..-1], pair.last]], h[pair.first.first])
       end
     end
     h
