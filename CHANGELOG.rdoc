@@ -2,7 +2,10 @@
 
 == 0.0.4 (...)
 * Better overview link in edit mode
-* Add export of current offset
+* Add export of current offset for yml, csv and json
+* Add import for yml
+* Better manual
+* Add deletion of current offset without limits
 
 == 0.0.3 (2011-05-16)
 * CouchI18n.import_from_yaml does not underscore the keys anymore

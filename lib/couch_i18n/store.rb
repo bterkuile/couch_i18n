@@ -45,6 +45,11 @@ module CouchI18n
       translation.save
     end
 
+    # Shorthand for selecting all stored with a given offset
+    def self.with_offset(offset, options = {})
+      find_all_by_key("#{offset}.".."#{offset}.ZZZZZZZZZ", options)
+    end
+
     # alias for read
     def self.[](key, options=nil)
       find_by_key(key.to_s).try(:value) rescue nil

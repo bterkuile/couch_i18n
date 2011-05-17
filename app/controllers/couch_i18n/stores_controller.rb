@@ -11,7 +11,7 @@ module CouchI18n
             :offset => @levels[0..i].join('.')
           }
         end
-        @couch_i18n_stores = CouchI18n::Store.find_all_by_key("#{params[:offset]}.".."#{params[:offset]}.\u9999", :page => params[:page], :per_page => 30)
+        @couch_i18n_stores = CouchI18n::Store.with_offset(params[:offset], :page => params[:page], :per_page => 30)
         @available_deeper_offsets = CouchI18n::Store.get_keys_by_level(@levels.size, :startkey => @levels, :endkey => @levels + [{}]).
           map{|dl| {:name => dl, :offset => [params[:offset], dl].join('.')}}
       else
@@ -37,9 +37,13 @@ module CouchI18n
         render :action => :new
       end
     end
+
+    # GET /couch_i18n/stores/:id/edit
     def edit
       @couch_i18n_store = CouchI18n::Store.find(params[:id])
     end
+
+    # PUT /couch_i18n/stores/:id
     def update
       @couch_i18n_store = CouchI18n::Store.find(params[:id])
       if @couch_i18n_store.update_attributes(params[:couch_i18n_store])
@@ -57,9 +61,11 @@ module CouchI18n
       redirect_to({:action => :index, :offset => @couch_i18n_store.key.to_s.sub(/\.\w+$/, '')})
     end
 
+    # POST /couch_i18n/stores/export
+    # Export to yml, csv or json
     def export
       if params[:offset].present?
-        @couch_i18n_stores = CouchI18n::Store.find_all_by_key("#{params[:offset]}.".."#{params[:offset]}.\u9999", :page => params[:page], :per_page => 30)
+        @couch_i18n_stores = CouchI18n::Store.with_offset(params[:offset])
       else
         @couch_i18n_stores = CouchI18n::Store.all
       end
@@ -80,6 +86,8 @@ module CouchI18n
       end
     end
 
+    # POST /couch_i18n/stores/import
+    # Import yml files
     def import
       redirect_to({:action => :index, :offset => params[:offset]}, :alert => I18n.t('couch_i18n.store.no import file given')) and return unless params[:importfile].present?
       filename = params[:importfile].original_filename
@@ -101,7 +109,19 @@ module CouchI18n
       else
         redirect_to({:action => :index, :offset => params[:offset]}, :alert => I18n.t('couch_i18n.store.no proper import extension', :extension => extension)) and return 
       end
-      redirect_to({:action => :index, :offset => params[:offset]}, :notice => I18n.t('couch_i18n.store.file imported'))
+      redirect_to({:action => :index, :offset => params[:offset]}, :notice => I18n.t('couch_i18n.store.file imported', :filename => filename))
+    end
+
+    # Very dangarous action, please handle this with care, large removals are supported!
+    # DELETE /couch_i18n/stores/destroy_offset?...
+    def destroy_offset
+      if params[:offset].present?
+        @couch_i18n_stores = CouchI18n::Store.with_offset(params[:offset])
+      else
+        @couch_i18n_stores = CouchI18n::Store.all
+      end
+      @couch_i18n_stores.map(&:destroy)
+      redirect_to({:action => :index}, :notice => I18n.t('couch_i18n.store.offset deleted', :count => @couch_i18n_stores, :offset => params[:offset]))
     end
   end
 end

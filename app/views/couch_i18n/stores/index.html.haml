@@ -1,4 +1,6 @@
-- title t("couch_i18n.store.Index title")
+- title t("couch_i18n.store.index title")
+.destroy-link
+  = link_to t('couch_i18n.store.destroy offset link'), destroy_offset_couch_i18n_stores_path(:offset => params[:offset]), :method => :delete, :confirm => (defined?(:are_you_sure) ? are_you_sure : t('couch_i18n.store.are you sure'))
 .import-form
   = form_tag({:action => :import}, :multipart => true) do
     = file_field_tag :importfile
@@ -38,7 +40,7 @@
           %td= link_to link_to_edit_content(couch_i18n_store), edit_couch_i18n_store_path(couch_i18n_store)
           %td= link_to link_to_destroy_content(couch_i18n_store),couch_i18n_store_path(couch_i18n_store), :confirm => are_you_sure, :method => :delete
 - else
-  %h3= t("couch_i18n_store.None found")
+  %h3= t("couch_i18n_store.none found")
 
 - content_for :page_links do
   = link_to link_to_new_content(:couch_i18n_store), new_couch_i18n_store_path(:offset => params[:offset])

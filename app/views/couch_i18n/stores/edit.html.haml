@@ -1,4 +1,4 @@
-- title t("couch_i18n.store.Edit title")
+- title t("couch_i18n.store.edit title")
 = render 'form'
 - content_for :page_links do
   = link_to link_to_index_content(:couch_i18n_stores), couch_i18n_stores_path(:offset => params[:offset] || @couch_i18n_store.key.to_s.sub(/\.[\w\s-]+$/, ''))

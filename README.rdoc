@@ -9,10 +9,7 @@ database type:
 Now all translations are ported to the database. If you change then now in the
 yaml files, they will nolonger be displayed in the website. They should be managed
 in the database. This gem also provides a translation management system. To place this
-in your own design, create a file _app/views/layouts/couch_i18n/application.html.haml_ with the 
-following content:
-  = render :template => '/layouts/application'
-Or create your own really nice template. Let me know if there is a nice layout!
+in your own design, read the layout section.
 Your Gemfile should look like:
   gem 'simply_stored', :git => 'git://github.com/bterkuile/simply_stored.git'
   gem 'couch_i18n'
@@ -24,6 +21,7 @@ And in your config routes put:
       collection do
         post :export
         post :import
+        delete :destroy_offset
       end
     end
   end
@@ -34,6 +32,7 @@ Or to put is at a different location:
       collection do
         post :export
         post :import
+        delete :destroy_offset
       end
     end
   end
@@ -62,17 +61,111 @@ initializer: _config/initializers/couch_I18n_modifications.rb_
   end
 And in _config/authorization_rules.rb_ put your personalized version of:
   role :translator do
-    has_permission_on :couch_i18n_stores, :to => [:manage, :import, :export]
+    has_permission_on :couch_i18n_stores, :to => [:manage, :import, :export, :destroy_offset]
   end
 Beware that a permission denied message will appear when the server is restarted
 this way. This is because the current user is set in ApplicationController which
 is not part of the CouchI18n controller stack.
 
+== couch_i18n translations
+Ofcourse couch_i18n is working with translations as well. To get them working import
+the following yamlL
+  en:
+    New: New
+    Edit: Edit
+    Show: Show
+    Back: Back
+    Save: Save
+    Create: Create
+    Are you sure: 'Are you sure?'
+    activemodel:
+      models:
+        couch_i18n:
+          store: Translation
+      attributes:
+        couch_i18n:
+          store:
+            key: Key
+            value: Value
+    action:
+      create:
+        successful: %{model} successfully created
+      update:
+        successful: %{model} successfully updated
+      destroy:
+        successful: %{model} successfully removed
+    chouch_i18n: 
+      store:
+        index title: Translations
+        none found: No translations present
+        new title: New translation
+        show title: Translation
+        edit title: Edit translation
+        offset deleted: "%{count} translations with offset %{offset} are deleted"
+        no proper import extension: Files with extension%{extension} cannot be imported
+        no import file given: There is no file to be imported
+        cannot parse yaml: The file cannot be read
+        file imported: File %{filename} was successfully imported
+        # The following tranlation will only work if no are_you_sure helper is present
+        are you sure: 'Are you sure?'
+        # The following tranlation will only work if no site_title helper is present
+        site_title: Translations
+== couch_i18n helpers
+The following helpers are assumed:
+  module CouchI18nViewHelpers
+    def title(str)
+      content_for :title do
+        content_tag(:h1, str)
+      end
+    end
+    def link_to_new_content(obj)
+      t('New')
+    end
+    def link_to_edit_content(obj = nil)
+      t('Edit')
+    end
+    def link_to_show_content(obj = nil)
+      t('Show')
+    end
+    def link_to_index_content(singular_name)
+      t('Back')
+    end
+    def link_to_destroy_content(obj = nil)
+      t('Delete')
+    end
+    def update_button_text(obj = nil)
+      t('Save')
+    end
+    def create_button_text(obj = nil)
+      t('Create')
+    end
+    def boolean_text(truefalse)
+      truefalse ? t('boolean true') : t('boolean false')
+    end
+    def are_you_sure(obj = nil)
+      t('Are you sure')
+    end
+  end
+
+== couch_i18n layout
+This gem comes with its own layout file, but you can ofcourse use your own. To do this place a layout at your application with the 
+path: <tt>app/views/layouts/couch_i18n/application.html.haml</tt>
+It should <tt>yield</tt> the following parts:
+  !!!
+  %html
+    %head
+      %title= defined?(site_title) ? site_title : I18n.t('couch_i18n.store.site_title')
+      = csrf_meta_tag
+      = yield :head
+    %body
+      #page-wrapper
+        #page-content
+          %h1= yield :title
+          = yield
+          #page-links= yield :page_links
 == TODO
 Here my todo list for this project. Makes it insightful for everybody what is on
 the planning of being made.
 * Check on locale inclusion with are you sure? force creation of new locale. Mostly a stupic mistake omitting these.
-* Add grouped deletes. Dangerous, but controllable using the declarative_authorization example
 * Add grouped search/replaces to move one group of translations to another section. Same comment as above
 * Search through values. If anyone has a better idea than searching by ruby through all the translations or adding lucene please feel free.
-* Good import export functionality
