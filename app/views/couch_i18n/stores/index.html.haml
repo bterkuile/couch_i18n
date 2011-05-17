@@ -4,12 +4,12 @@
 .import-form
   = form_tag({:action => :import}, :multipart => true) do
     = file_field_tag :importfile
-    = submit_tag 'Import'
+    = submit_tag I18n.t('couch_i18n.store.import')
 .export-form
   = form_tag :action => :export do
     = hidden_field_tag :offset, params[:offset]
     = select_tag :exportformat, options_for_select(%w[yml csv json], params[:exportformat])
-    = submit_tag 'Export'
+    = submit_tag I18n.t('couch_i18n.store.export')
 .offset-navigation-block.block
   .offset-navigation-higher
     - for offset in @available_higher_offsets
@@ -17,10 +17,10 @@
   .offset-navigation-form
     = form_tag({}, :method => :get )do
       - if params[:offset].present?
-        = link_to 'x', :offset => nil
+        = link_to I18n.t('couch_i18n.store.go to zero offset'), :offset => nil
       = text_field_tag :offset, params[:offset], :size => 60
       = "(#{@couch_i18n_stores.total_entries})"
-      = submit_tag 'Select offset'
+      = submit_tag I18n.t('couch_i18n.store.go to offset')
   .offset-navigation-deeper
     - for offset in @available_deeper_offsets
       = link_to offset[:name], :offset => offset[:offset]

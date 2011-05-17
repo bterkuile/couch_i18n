@@ -101,6 +101,10 @@ the following yamlL
         new title: New translation
         show title: Translation
         edit title: Edit translation
+        go to offset: Go to
+        got to zero offset: x
+        export: Export
+        import: Import
         offset deleted: "%{count} translations with offset %{offset} are deleted"
         no proper import extension: Files with extension%{extension} cannot be imported
         no import file given: There is no file to be imported
@@ -108,6 +112,7 @@ the following yamlL
         file imported: File %{filename} was successfully imported
         # The following tranlation will only work if no are_you_sure helper is present
         are you sure: 'Are you sure?'
+        destroy offset link: Delete all translations with current offset
         # The following tranlation will only work if no site_title helper is present
         site_title: Translations
 == couch_i18n helpers
@@ -169,3 +174,5 @@ the planning of being made.
 * Check on locale inclusion with are you sure? force creation of new locale. Mostly a stupic mistake omitting these.
 * Add grouped search/replaces to move one group of translations to another section. Same comment as above
 * Search through values. If anyone has a better idea than searching by ruby through all the translations or adding lucene please feel free.
+* A lot of testing
+* Add error_messages partial to manual
