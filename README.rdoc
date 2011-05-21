@@ -94,7 +94,7 @@ the following yamlL
         successful: %{model} successfully updated
       destroy:
         successful: %{model} successfully removed
-    chouch_i18n: 
+    couch_i18n: 
       store:
         index title: Translations
         none found: No translations present
@@ -102,7 +102,7 @@ the following yamlL
         show title: Translation
         edit title: Edit translation
         go to offset: Go to
-        got to zero offset: x
+        go to zero offset: x
         export: Export
         import: Import
         offset deleted: "%{count} translations with offset %{offset} are deleted"
