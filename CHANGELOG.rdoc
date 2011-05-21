@@ -1,11 +1,12 @@
 = CHANGELOG
 
-== 0.0.4 (...)
+== 0.0.4 (2011-05-21)
 * Better overview link in edit mode
 * Add export of current offset for yml, csv and json
 * Add import for yml
 * Better manual
 * Add deletion of current offset without limits
+* Add modified backend based on I18n key value backend
 
 == 0.0.3 (2011-05-16)
 * CouchI18n.import_from_yaml does not underscore the keys anymore
