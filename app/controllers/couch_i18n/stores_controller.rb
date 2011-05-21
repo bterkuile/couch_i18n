@@ -78,7 +78,7 @@ module CouchI18n
         response.headers['Content-Type'] = 'application/json'
         response.headers['Content-Disposition'] = %{attachment; filename="#{base_filename}.json"}
         # render :text => CouchI18n.indent_keys(@couch_i18n_stores).to_json # for indented json
-        render :json => @couch_i18n_stores.map{|s| {s.key, s.value}}.to_json
+        render :json => @couch_i18n_stores.map{|s| {s.key => s.value}}.to_json
       else #yaml
         response.headers['Content-Type'] = 'application/x-yaml'
         response.headers['Content-Disposition'] = %{attachment; filename="#{base_filename}.yml"}
