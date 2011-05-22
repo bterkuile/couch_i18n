@@ -121,7 +121,7 @@ module CouchI18n
         @couch_i18n_stores = CouchI18n::Store.all
       end
       @couch_i18n_stores.map(&:destroy)
-      redirect_to({:action => :index}, :notice => I18n.t('couch_i18n.store.offset deleted', :count => @couch_i18n_stores, :offset => params[:offset]))
+      redirect_to({:action => :index}, :notice => I18n.t('couch_i18n.store.offset deleted', :count => @couch_i18n_stores.size, :offset => params[:offset]))
     end
   end
 end
