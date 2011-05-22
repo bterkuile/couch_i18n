@@ -1,8 +1,6 @@
-require "i18n/backend/cache"
 require "couch_i18n/engine"
 require 'couch_i18n/store'
 require 'couch_i18n/backend'
-I18n::Backend::KeyValue.send(:include, I18n::Backend::Cache)
 module CouchI18n
   # This method imports yaml translations to the couchdb version. When run again new ones will
   # be added. Translations already stored in the couchdb database are not overwritten
@@ -55,7 +53,5 @@ module CouchI18n
     h
   end
 end
-
 # Now extend the I18n backend
 I18n.backend = I18n::Backend::Chain.new(CouchI18n::Backend.new(CouchI18n::Store), I18n.backend)
-I18n.cache_store = ActiveSupport::Cache.lookup_store(:memory_store)

@@ -1,10 +1,3 @@
-# First comment out backend declaration in config/initializers/i18n_backend.rb
-# this looks like:
-#   #I18n.backend = I18n::Backend::Chain.new(I18n::Backend::KeyValue.new(CouchI18n::Store), I18n.backend)
-# Then load the translations: 
-#   I18n.t('New')
-# Then create the translations
-#   I18n.t('New');I18n.backend.send(:translations).flatten_keys.each{|k, v| CouchI18n::Store.create(:key => k, :value => v)}
 module CouchI18n
   class Store
     include SimplyStored::Couch
@@ -45,6 +38,12 @@ module CouchI18n
       translation.save
     end
 
+    # Expire I18n when record is updated
+    after_save do
+      I18n.reload!
+      I18n.cache_store.clear if I18n.respond_to?(:cache_store) && I18n.cache_store.respond_to?(:clear)
+    end
+
     # Shorthand for selecting all stored with a given offset
     def self.with_offset(offset, options = {})
       find_all_by_key("#{offset}.".."#{offset}.ZZZZZZZZZ", options)
@@ -57,13 +56,6 @@ module CouchI18n
 
     def self.keys
       all.map(&:key)
-    end
-
-    private
-
-    def reload_i18n
-      I18n.reload!
-      I18n.cache_store.clear if I18n.respond_to?(:cache_store) && I18n.cache_store.respond_to?(:clear)
     end
   end
 end
