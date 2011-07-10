@@ -1,4 +1,4 @@
-- title t("couch_i18n.store.new title")
+- title t("couch_i18n.translation.new title")
 = render 'form'
 - content_for :page_links do
-  = link_to link_to_index_content(:couch_i18n_stores), couch_i18n_stores_path(:offset => params[:offset])
+  = link_to link_to_index_content(:couch_i18n_translations), couch_i18n.translations_path(:offset => params[:offset])
