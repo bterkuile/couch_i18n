@@ -9,5 +9,5 @@ Gem::Specification.new do |s|
   s.summary = "couch_i18n is an in database storage for I18n translations, tested for rails, with online management views"
   s.description = "couch_i18n is an in database storage for I18n translations, tested for rails, with online management views"
   s.files = Dir["lib/**/*"] + Dir["app/**/*"] + Dir["config/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.version = "0.0.5"
+  s.version = "0.0.6"
 end
