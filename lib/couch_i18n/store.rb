@@ -17,10 +17,25 @@ module CouchI18n
     # alias for read
     def [](key, options=nil)
       Rails.cache.fetch(key) do
+        old_database_name = get_couchrest_name
+        set_couchrest_name CouchPotato::Config.database_name # Set database to original configured name
         translation = CouchI18n::Translation.find_by_key(key.to_s)
         translation ||= CouchI18n::Translation.create(:key => key, :value => key.to_s.split('.').last, :translated => false)
+        set_couchrest_name old_database_name
         translation.value
       end
+    end
+
+    def set_couchrest_name(name)
+      d = CouchPotato.database.couchrest_database
+      d.instance_variable_set('@name', name)
+      d.instance_variable_set('@uri', "/#{name.gsub('/', '%2F')}")
+      d.instance_variable_set('@bulk_save_cache', [])
+      d.instance_variable_set('@root', d.host + d.uri)
+    end
+
+    def get_couchrest_name
+      CouchPotato.database.couchrest_database.name
     end
 
     def keys
