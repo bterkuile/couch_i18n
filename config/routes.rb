@@ -1,6 +1,6 @@
 CouchI18n::Engine.routes.draw do
-  root :to => "stores#index"
-  resources :stores do
+  root :to => "translations#index"
+  resources :translations do
     collection do
       post :export
       post :import

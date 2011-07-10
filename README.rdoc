@@ -1,5 +1,7 @@
 = CouchI18n
 
+<b>Note this is a Rails >= 3.1 engine</b>
+
 This projects is created to make translations editable. It is created using
 the simply_stored gem. To use the web frontend please read the README section
 on this carefully. Important to know is that this system sits *on top* of the
@@ -15,30 +17,7 @@ Your Gemfile should look like:
   gem 'couch_i18n'
   gem 'kaminari'
 And in your config routes put:
-  namespace :couch_i18n do
-    root :to => "stores#index"
-    resources :stores do
-      collection do
-        post :export
-        post :import
-        delete :destroy_offset
-      end
-    end
-  end
-Or to put is at a different location:
-  namespace :translations, :module => :couch_i18n, :as => 'couch_i18n' do
-    root :to => "stores#index"
-    resources :stores do
-      collection do
-        post :export
-        post :import
-        delete :destroy_offset
-      end
-    end
-  end
-The intention is to make this a mountable application, but this will not happen 
-before Rails 3.1 is officially out. But beware of using this if your application
-will not be Rails 3.1 compatible.
+  mount CouchI18n::Engine => '/couch_i18n'
 
 == Security!!!
 By default there is no security activated for editing the translation. This is 
@@ -81,10 +60,10 @@ the following yamlL
     activemodel:
       models:
         couch_i18n:
-          store: Translation
+          translation: Translation
       attributes:
         couch_i18n:
-          store:
+          translation:
             key: Key
             value: Value
     action:
@@ -95,7 +74,7 @@ the following yamlL
       destroy:
         successful: %{model} successfully removed
     couch_i18n: 
-      store:
+      translation:
         index title: Translations
         none found: No translations present
         new title: New translation
@@ -103,7 +82,9 @@ the following yamlL
         edit title: Edit translation
         go to offset: Go to
         go to zero offset: x
-        export: Export
+        export: 
+          execute: Export
+          untranslated: Untranslated
         import: Import
         offset deleted: "%{count} translations with offset %{offset} are deleted"
         no proper import extension: Files with extension%{extension} cannot be imported
@@ -159,13 +140,16 @@ It should <tt>yield</tt> the following parts:
   !!!
   %html
     %head
-      %title= defined?(site_title) ? site_title : I18n.t('couch_i18n.store.site_title')
+      %title= defined?(site_title) ? site_title : I18n.t('couch_i18n.translation.site_title')
       = csrf_meta_tag
+      = stylesheet_link_tag 'couch_i18n/application'
+      = javascript_include_tag 'couch_i18n/application'
       = yield :head
     %body
       #page-wrapper
         #page-content
           %h1= yield :title
+          = render 'alerts'
           = yield
           #page-links= yield :page_links
 == TODO

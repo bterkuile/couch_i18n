@@ -1,0 +1,9 @@
+development:
+  validation_framework: :active_model
+  database: couch_i18n_dummy
+test:
+  database: couch_i18n_dummy_test
+  validation_framework: :active_model
+production:
+  validation_framework: :active_model
+  database: couch_i18n_dummy

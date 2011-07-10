@@ -1,0 +1,32 @@
+$green: #729A37;
+$red: #D65819;
+.alert-message, #error_explanation{
+  margin: 10px 40px;
+  border-width: 2px;
+  border-style: solid;
+  background-repeat: no-repeat;
+  background-position: left center;
+  font-weight: bold;
+}
+.alert-message .message, #error_explanation .errors-content{
+  margin-left: 40px;
+  padding: 20px;
+}
+.notice{
+  background-color: lighten($green, 50%);
+  border-color: darken($green, 10%);
+  color: darken($green, 20%);
+  background-image: url('/assets/couch_i18n/notice.png');
+}
+.alert, #error_explanation{
+  background-color: lighten($red, 50%);
+  border-color: darken($red, 10%);
+  color: darken($red, 20%);
+  background-image: url('/assets/couch_i18n/alert.png');
+}
+.field_with_errors{
+  padding: 2px 5px;
+  background-color: $red;
+  display: table;
+  color: white;
+}

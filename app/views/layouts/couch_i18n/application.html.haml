@@ -3,10 +3,14 @@
   %head
     %title= defined?(site_title) ? site_title : I18n.t('couch_i18n.store.site_title')
     = csrf_meta_tag
+    = stylesheet_link_tag 'couch_i18n/application'
+    = javascript_include_tag 'couch_i18n/application'
     = yield :head
   %body
     #page-wrapper
-      #page-content
+      #page-header
         %h1= yield :title
+      #page-content
+        = render 'alerts'
         = yield
         #page-links= yield :page_links

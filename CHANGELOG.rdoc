@@ -1,4 +1,13 @@
 = CHANGELOG
+== 0.0.5 (2011-07-10)
+* Many changes, read carefully
+* Rails >= 3.1 only, as mountable engine
+* Agressive caching for performance
+* Separation between store and translation
+* Engine with styling
+* Untranslated string handling
+* Untranslated string export
+* Allow json attributes
 
 == 0.0.4 (2011-05-21)
 * Better overview link in edit mode
