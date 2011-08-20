@@ -16,8 +16,7 @@ module CouchI18n
           map{|dl| {:name => dl, :offset => [params[:offset], dl].join('.')}}
       else
         @translations = CouchI18n::Translation.all(:page => params[:page], :per_page => 30)
-        @available_deeper_offsets = CouchI18n::Translation.get_keys_by_level(0).
-          map{|dl| {:name => dl, :offset => dl}}
+        @available_deeper_offsets = CouchI18n::Translation.get_keys_by_level(0).map{|dl| {:name => dl, :offset => dl}}
       end
     end
 

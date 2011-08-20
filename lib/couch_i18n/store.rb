@@ -7,7 +7,7 @@ module CouchI18n
 
     # Now the store features
     def []=(key, value, options = {})
-      key = key.to_s
+      key = key.to_s.gsub('/', '.')
       existing = CouchI18n::Translation.find_by_key(key) rescue nil
       translation = existing || CouchI18n::Translation.new(:key => key)
       translation.value = value
@@ -16,6 +16,7 @@ module CouchI18n
 
     # alias for read
     def [](key, options=nil)
+      key = key.to_s.gsub('/', '.')
       Rails.cache.fetch(key) do
         old_database_name = get_couchrest_name
         begin

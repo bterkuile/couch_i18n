@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 
-gem 'rails', '3.1.0.rc4' #     :git => 'git://github.com/rails/rails.git'
-gem 'sprockets', '2.0.0.beta.10'
+gem 'rails', '3.1.0.rc5' #     :git => 'git://github.com/rails/rails.git'
+gem 'sprockets' #, '2.0.0.beta.10'
 gem 'jquery-rails'
 gem 'sqlite3'
 
