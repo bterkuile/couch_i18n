@@ -9,5 +9,7 @@ Gem::Specification.new do |s|
   s.summary = "couch_i18n is an in database storage for I18n translations, tested for rails, with online management views"
   s.description = "couch_i18n is an in database storage for I18n translations, tested for rails, with online management views"
   s.files = Dir["lib/**/*"] + Dir["app/**/*"] + Dir["config/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.version = "0.0.7"
+  s.add_dependency 'activemodel', '>= 3'
+  s.add_dependency 'simply_stored'
+  s.version = "0.0.8"
 end

@@ -63,4 +63,4 @@ module CouchI18n
   end
 end
 # Now extend the I18n backend
-I18n.backend = I18n::Backend::Chain.new(CouchI18n::Backend.new(CouchI18n::Store.new), I18n.backend)
+I18n.backend = I18n::Backend::Chain.new(CouchI18n::Backend.new(CouchI18n::Store.new), I18n.backend) unless Rails.env == 'test'

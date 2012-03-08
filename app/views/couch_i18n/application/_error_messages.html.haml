@@ -1,6 +1,6 @@
 -if target.errors.any?
   #errorExplanation
-    %h2= t('Errors title', :count => target.errors.count)
+    %h2= t('couch_i18n.errors.title', :count => target.errors.count)
     %ul
       - target.errors.full_messages.each do |msg|
         %li= msg

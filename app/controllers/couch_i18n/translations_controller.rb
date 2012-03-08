@@ -34,7 +34,7 @@ module CouchI18n
         @translation.value = JSON.parse(@translation.value)
       end
       if @translation.save
-        redirect_to({:action => :index, :offset => @translation.key.to_s.sub(/\.[\w\s-]+$/, '')}, :notice => I18n.t('action.create.successful', :model => CouchI18n::Translation.model_name.human))
+        redirect_to({:action => :index, :offset => @translation.key.to_s.sub(/\.[\w\s-]+$/, '')}, :notice => I18n.t('couch_i18n.action.create.successful', :model => CouchI18n::Translation.model_name.human))
       else
         render :action => :new
       end
@@ -53,7 +53,7 @@ module CouchI18n
         params[:translation]["value"] = JSON.parse(params[:translation]["value"])
       end
       if @translation.update_attributes(params[:translation])
-        redirect_to({:action => :index, :offset => @translation.key.to_s.sub(/\.[\w\s-]+$/, '')}, :notice => I18n.t('action.update.successful', :model => CouchI18n::Translation.model_name.human))
+        redirect_to({:action => :index, :offset => @translation.key.to_s.sub(/\.[\w\s-]+$/, '')}, :notice => I18n.t('couch_i18n.action.update.successful', :model => CouchI18n::Translation.model_name.human))
       else
         render :action => :edit
       end
@@ -62,7 +62,7 @@ module CouchI18n
     def destroy
       @translation = CouchI18n::Translation.find(params[:id])
       if @translation.destroy
-        flash[:notice] = I18n.t('action.destroy.successful', :model => CouchI18n::Translation.model_name.human)
+        flash[:notice] = I18n.t('couch_i18n.action.destroy.successful', :model => CouchI18n::Translation.model_name.human)
       end
       redirect_to({:action => :index, :offset => @translation.key.to_s.sub(/\.\w+$/, '')})
     end

@@ -1,4 +1,9 @@
 = CHANGELOG
+
+== 0.0.8 (2011-11-30)
+* Better namespaced translation of own application
+* Overwrite activemodel error messages, only one method is allowed
+
 == 0.0.6 (2011-07-10)
 * Fix adding new translation
 * Ensure working on configured database (long story)

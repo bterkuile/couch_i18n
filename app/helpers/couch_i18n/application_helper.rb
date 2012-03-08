@@ -7,31 +7,31 @@ module CouchI18n
     end
 
     def link_to_new_content(obj)
-      t('New')
+      t('couch_i18n.action.new.label')
     end
     def link_to_edit_content(obj = nil)
-      t('Edit')
+      t('couch_i18n.action.edit.label')
     end
     def link_to_show_content(obj = nil)
-      t('Show')
+      t('couch_i18n.action.show.label')
     end
     def link_to_index_content(singular_name)
-      t('Back')
+      t('couch_i18n.action.index.label')
     end
     def link_to_destroy_content(obj = nil)
-      t('Delete')
+      t('couch_i18n.action.destroy.label')
     end
     def update_button_text(obj = nil)
-      t('Save')
+      t('couch_i18n.action.update.button_text')
     end
     def create_button_text(obj = nil)
-      t('Create')
+      t('couch_i18n.action.create.button_text')
     end
     def boolean_show(truefalse)
-      truefalse ? t('boolean true') : t('boolean false')
+      truefalse ? t('couch_i18n.general.boolean_true') : t('couch_i18n.general.boolean_false')
     end
     def are_you_sure(obj = nil)
-      t('Are you sure')
+      t('couch_i18n.general.are_you_sure')
     end
   end
 end
