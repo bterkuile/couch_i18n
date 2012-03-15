@@ -9,4 +9,11 @@ class CouchI18nTest < ActiveSupport::TestCase
     assert_equal CouchI18n::Store.count, CouchI18n.traverse_flatten_keys({}, CouchI18n.indent_keys).size
     # And a lot more
   end
+
+  test "finding by part" do
+    t1 = CouchI18n::Translation.create(key: 'nl.prefix.partfinder.suffix', value: 'Value')
+    t2 = CouchI18n::Translation.create(key: 'nl.prefix.partfinder disabled.suffix', value: 'Value')
+    t3 = CouchI18n::Translation.create(key: 'en.prefix.partfinder.suffix', value: 'Value')
+    assert_equal [t1, t3], CouchI18n::Translation.find_all_by_key_parth('partfinder')
+  end
 end

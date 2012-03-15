@@ -5,7 +5,7 @@ module CouchI18n
 
     property :key
     property :value
-    property :translated, :type => :boolean, :default => true
+    property :translated, type: :boolean, default: true
 
     validates_uniqueness_of :key
 
@@ -14,13 +14,22 @@ module CouchI18n
     view :all_documents, :key => :key
     view :by_key, :key => :key
 
-    view :with_key_array, :map => %|function(doc){
+    view :with_key_array, map_function: %|function(doc){
       if(doc.ruby_class && doc.ruby_class == 'CouchI18n::Translation') {
         emit(doc.key.split('.').slice(0, -1), 1);
       }
-    }|, :type => :raw, :reduce => '_sum'
+    }|, type: :raw, reduce_function: :_sum
 
-    view :untranslated_view, :key => :key, :conditions => "!doc['translated']"
+    view :untranslated_view, key: :key, conditions: "!doc['translated']"
+    view :by_value, key: :value
+    view :by_key_part, type: :custom, map_function: %|function(doc){
+      if(doc.ruby_class && doc.ruby_class == 'CouchI18n::Translation') {
+        var parts = doc.key.split('.');
+        for(var i = 0; i < parts.length; i++){
+          emit(parts[i], 1);
+        }
+      }
+    }|
 
     def self.get_keys_by_level(level = 0, options = {})
       data = database.view(with_key_array(options.merge(:group_level => level.succ)))["rows"]
@@ -31,6 +40,10 @@ module CouchI18n
     # Shorthand for selecting all stored with a given offset
     def self.with_offset(offset, options = {})
       CouchI18n::Translation.find_all_by_key("#{offset}.".."#{offset}.ZZZZZZZZZ", options)
+    end
+
+    def self.find_all_by_key_part(part)
+      database.view(by_key_part(key: part, reduce: false, include_docs: true))
     end
 
     def self.untranslated(*args)
