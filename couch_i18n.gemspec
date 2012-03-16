@@ -11,5 +11,5 @@ Gem::Specification.new do |s|
   s.files = Dir["lib/**/*"] + Dir["app/**/*"] + Dir["config/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.add_dependency 'activemodel', '>= 3'
   s.add_dependency 'simply_stored'
-  s.version = "0.0.9"
+  s.version = "0.1.0"
 end
