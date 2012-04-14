@@ -4,8 +4,11 @@ require 'couch_i18n/backend'
 require 'couch_i18n/active_model_errors'
 module CouchI18n
   # This method imports yaml translations to the couchdb version. When run again new ones will
-  # be added. Translations already stored in the couchdb database are not overwritten
-  def self.import_from_yaml
+  # be added. Translations already stored in the couchdb database are not overwritten if true or ovveride_existing: true is given
+  def self.import_from_yaml(options = {})
+    options = {:override_existing => true} if options.is_a?(TrueClass)
+    options = {:override_existing => false} if options.is_a?(FalseClass)
+    options = {:override_existing => false}.merge!(options)
     raise "I18.backend not a I18n::Backend::Chain" unless I18n.backend.is_a?(I18n::Backend::Chain)
     # 
     yml_backend = I18n.backend.backends.last
@@ -13,8 +16,16 @@ module CouchI18n
     raise "Last backend not a I18n::Backend::Simple" unless yml_backend.is_a?(I18n::Backend::Simple)
     yml_backend.load_translations
     flattened_hash = traverse_flatten_keys(yml_backend.send(:translations))
+    available_translations = CouchI18n::Translation.all
     flattened_hash.each do |key, value|
-      CouchI18n::Translation.create :key => key, :value => value
+      available_translation = available_translations.find{|t| t.key == key}
+      if available_translation && options[:override_existing]
+        available_translation.value = value
+        available_translation.translated = true
+        available_translation.save
+      else
+        available_translation = CouchI18n::Translation.create :key => key, :value => value
+      end
     end
   end
 
@@ -62,5 +73,7 @@ module CouchI18n
     end
   end
 end
+
 # Now extend the I18n backend
 I18n.backend = I18n::Backend::Chain.new(CouchI18n::Backend.new(CouchI18n::Store.new), I18n.backend) unless Rails.env == 'test'
+I18n.load_path += Dir.glob(File.join(File.dirname(__FILE__), '..', 'config', 'locales', '*'))

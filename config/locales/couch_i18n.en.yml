@@ -1,0 +1,47 @@
+---
+en:
+  couch_i18n:
+    action:
+      edit:
+        title: Edit translation
+      destroy:
+        label: Delete
+        offset_link: Delete all from offset
+      edit:
+        label: Edit
+      index:
+        label: Translations
+        title: Translations
+      new:
+        label: New
+      update:
+        button_text: Update
+    export:
+      execute: Execute
+      untranslated: Untranslated
+      label: Export
+    general:
+      are_you_sure: 'Are you sure?'
+      boolean_false: 'no'
+      boolean_true: 'yes'
+      go_to_offset: Go to offset
+      go_to_zero_offset: x
+      none_found: No translations found
+      site_title: CouchI18n translations
+      untranslated_title: Untranslated
+    import:
+      button: Import
+      label: Import
+  activemodel:
+    models:
+      couch_i18n:
+        translation: Translation
+      plural:
+        couch_i18n:
+          translation: Translations
+    attributes:
+      couch_i18n:
+        translation:
+          key: Key
+          value: Value
+          translated: 'Translated?'

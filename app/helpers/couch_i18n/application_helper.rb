@@ -6,6 +6,14 @@ module CouchI18n
        end
     end
 
+    def partfinder?
+      params[:partfinder].present?
+    end
+
+    def valuefinder?
+      params[:valuefinder].present?
+    end
+
     def link_to_new_content(obj)
       t('couch_i18n.action.new.label')
     end

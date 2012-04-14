@@ -29,7 +29,7 @@ module CouchI18n
           emit(parts[i], 1);
         }
       }
-    }|
+    }|, reduce_function: :_count
 
     def self.get_keys_by_level(level = 0, options = {})
       data = database.view(with_key_array(options.merge(:group_level => level.succ)))["rows"]
@@ -42,16 +42,29 @@ module CouchI18n
       CouchI18n::Translation.find_all_by_key("#{offset}.".."#{offset}.ZZZZZZZZZ", options)
     end
 
-    def self.find_all_by_key_part(part)
-      database.view(by_key_part(key: part, reduce: false, include_docs: true))
+    # Find all records having the term part in their key
+    #   nl.action.one
+    #   en.action.two
+    #   en.activemodel.plural.models.user
+    # and using
+    #   find_all_by_part('action')
+    # will return the first two since they have action as key part
+    def self.find_all_by_key_part(part, options = {})
+      total_entries = database.view(by_key_part(key: part, reduce: true))
+      with_pagination_options options.merge(total_entries: total_entries) do |options|
+        database.view(by_key_part(options.merge(key: part, reduce: false, include_docs: true)))
+      end
     end
 
-    def self.untranslated(*args)
-      database.view(untranslated_view(*args))
+    def self.untranslated(options = {})
+      total_entries = database.view(untranslated_view(options.select{|k,v| [:key, :keys, :startkey, :endkey].include?(k)}.merge(reduce: true)))
+      with_pagination_options options.merge(total_entries: total_entries) do |options|
+        database.view(untranslated_view(options))
+      end
     end
 
     def self.untranslated_with_offset(offset, options = {})
-      CouchI18n::Translation.untranslated("#{offset}.".."#{offset}.ZZZZZZZZZ", options)
+      CouchI18n::Translation.untranslated(options.merge(key: "#{offset}.".."#{offset}.ZZZZZZZZZ"))
     end
 
     # Expire I18n when record is update

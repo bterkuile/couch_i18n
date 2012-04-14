@@ -2,21 +2,37 @@ module CouchI18n
   class TranslationsController < CouchI18n::ApplicationController
     def index
       @available_higher_offsets = []
-      if params[:offset].present?
-        @levels = params[:offset].split('.')
-        # Add higher levels. Do not add the last level, since it is the current one => 0..-2
-        @levels[0..-2].each_with_index do |level_name, i|
-          @available_higher_offsets << {
-            :name => level_name,
-            :offset => @levels[0..i].join('.')
-          }
-        end
-        @translations = CouchI18n::Translation.with_offset(params[:offset], :page => params[:page], :per_page => 30)
-        @available_deeper_offsets = CouchI18n::Translation.get_keys_by_level(@levels.size, :startkey => @levels, :endkey => @levels + [{}]).
-          map{|dl| {:name => dl, :offset => [params[:offset], dl].join('.')}}
+      @available_deeper_offsets = []
+      per_page = params[:per_page].presence.try(:to_i) || 30
+      if params[:partfinder].present?
+        @translations = CouchI18n::Translation.find_all_by_key_part(params[:offset], page: params[:page], per_page: per_page)
+      elsif params[:valuefinder].present?
+        @translations = CouchI18n::Translation.find_all_by_value(params[:offset], page: params[:page], per_page: per_page)
       else
-        @translations = CouchI18n::Translation.all(:page => params[:page], :per_page => 30)
-        @available_deeper_offsets = CouchI18n::Translation.get_keys_by_level(0).map{|dl| {:name => dl, :offset => dl}}
+        if params[:offset].present?
+          @levels = params[:offset].split('.')
+          # Add higher levels. Do not add the last level, since it is the current one => 0..-2
+          @levels[0..-2].each_with_index do |level_name, i|
+            @available_higher_offsets << {
+              :name => level_name,
+              :offset => @levels[0..i].join('.')
+            }
+          end
+          if untranslated?
+            @translations = CouchI18n::Translation.untranslated_with_offset(params[:offset], :page => params[:page], :per_page => per_page)
+          else
+            @translations = CouchI18n::Translation.with_offset(params[:offset], :page => params[:page], :per_page => per_page)
+          end
+          @available_deeper_offsets = CouchI18n::Translation.get_keys_by_level(@levels.size, :startkey => @levels, :endkey => @levels + [{}]).
+            map{|dl| {:name => dl, :offset => [params[:offset], dl].join('.')}}
+        else
+          if untranslated?
+            @translations = CouchI18n::Translation.untranslated(:page => params[:page], :per_page => per_page)
+          else
+            @translations = CouchI18n::Translation.all(:page => params[:page], :per_page => per_page)
+          end
+          @available_deeper_offsets = CouchI18n::Translation.get_keys_by_level(0).map{|dl| {:name => dl, :offset => dl}}
+        end
       end
     end
 
@@ -138,5 +154,12 @@ module CouchI18n
       @translations.map(&:destroy)
       redirect_to({:action => :index}, :notice => I18n.t('couch_i18n.translation.offset deleted', :count => @translations.size, :offset => params[:offset]))
     end
+
+    private
+
+    def untranslated?
+      params[:untranslated].presence
+    end
+    helper_method :untranslated?
   end
 end

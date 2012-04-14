@@ -6,11 +6,13 @@
   = link_to t('couch_i18n.action.destroy.offset_link'), couch_i18n.destroy_offset_translations_path(:offset => params[:offset]), :method => :delete, :confirm => (defined?(:are_you_sure) ? are_you_sure : t('couch_i18n.general.are_you_sure'))
 .import-form
   = form_tag({:action => :import}, :multipart => true) do
+    = label_tag :importfile, t('couch_i18n.import.label')
     = file_field_tag :importfile
     = submit_tag I18n.t('couch_i18n.import.button')
 .export-form
   = form_tag :action => :export do
     = hidden_field_tag :offset, params[:offset]
+    = label_tag :exportformat, t('couch_i18n.export.label')
     = select_tag :exportformat, options_for_select(%w[yml csv json], params[:exportformat])
     = check_box_tag :untranslated
     = label_tag :untranslated, t('couch_i18n.export.untranslated')
@@ -19,16 +21,22 @@
   .offset-navigation-higher
     - for offset in @available_higher_offsets
       = link_to offset[:name], :offset => offset[:offset]
+    .clearing
   .offset-navigation-form
     = form_tag({}, :method => :get )do
       - if params[:offset].present?
         = link_to I18n.t('couch_i18n.general.go_to_zero_offset'), :offset => nil
       = text_field_tag :offset, params[:offset], :size => 60
-      = "(#{@translations.total_entries})"
-      = submit_tag I18n.t('couch_i18n.general.go_to_offset')
+      = "(#{@translations.total_count})"
+      %input{:type => :submit, :name => :commit, :value => I18n.t('couch_i18n.general.go_to_offset')}
+      %input{:type => :submit, :name => :partfinder, :value => I18n.t('couch_i18n.general.find_part')}
+      %input{:type => :submit, :name => :valuefinder, :value => I18n.t('couch_i18n.general.find_value')}
+      = check_box_tag :untranslated, 1, untranslated?    
+      = label_tag :untranslated, I18n.t('couch_i18n.general.untranslated_label')
   .offset-navigation-deeper
     - for offset in @available_deeper_offsets
       = link_to offset[:name], :offset => offset[:offset]
+    .clearing
 - if @translations.any?
   = paginate @translations, :right => 3, :left => 3
   %table.index-table
@@ -42,7 +50,11 @@
     %tbody
       - @translations.each do |translation|
         %tr{:class => cycle('odd', 'even')}
-          %td= link_to translation.key[(params[:offset].try(:size) || 0)..-1].sub(/^\./, ''), couch_i18n.edit_translation_path(translation)
+          %td
+            - if partfinder? || valuefinder?
+              = link_to translation.key.sub(/^\./, ''), couch_i18n.edit_translation_path(translation)
+            - else
+              = link_to translation.key[(params[:offset].try(:size) || 0)..-1].sub(/^\./, ''), couch_i18n.edit_translation_path(translation)
           %td= link_to translation.value, couch_i18n.edit_translation_path(translation)
           %td.boolean= boolean_show(translation.translated)
           %td.action.edit= link_to link_to_edit_content(translation), couch_i18n.edit_translation_path(translation)
