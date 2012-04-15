@@ -29,7 +29,7 @@ module CouchI18n
           emit(parts[i], 1);
         }
       }
-    }|, reduce_function: :_count
+    }|, reduce_function: '_count'
 
     def self.get_keys_by_level(level = 0, options = {})
       data = database.view(with_key_array(options.merge(:group_level => level.succ)))["rows"]
