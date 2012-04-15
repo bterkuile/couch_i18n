@@ -26,6 +26,8 @@ en:
       boolean_true: 'yes'
       go_to_offset: Go to offset
       go_to_zero_offset: x
+      find_part: Find key part
+      find_value: Find value
       none_found: No translations found
       site_title: CouchI18n translations
       untranslated_title: Untranslated
