@@ -17,7 +17,7 @@ module CouchI18n
     # alias for read
     def [](key, options = {})
       key = key.to_s.gsub('/', '.')
-      Rails.cache.fetch(key) do
+      Rails.cache.fetch("couch_i18n-#{key}") do
         old_database_name = get_couchrest_name
         begin
           set_couchrest_name CouchPotato::Config.database_name # Set database to original configured name

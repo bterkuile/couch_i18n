@@ -69,7 +69,7 @@ module CouchI18n
   # Add all translations to the cache to avoid one by one loading and caching
   def self.cache_all
     CouchI18n::Translation.all.each do |t|
-      Rails.cache.write(t.key, t.value)
+      Rails.cache.write("couch_i18n-#{t.key}", t.value)
     end
   end
 end
