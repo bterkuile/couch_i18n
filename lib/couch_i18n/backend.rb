@@ -1,7 +1,5 @@
 require 'i18n/backend/base'
 require 'active_support/json'
-require 'active_support/ordered_hash' # active_support/json/encoding uses ActiveSupport::OrderedHash but does not require it
-require "i18n/backend/cache"
 module CouchI18n
   class Backend
     # This is a basic backend for key value stores. It receives on
@@ -52,7 +50,6 @@ module CouchI18n
       attr_accessor :store
 
       include I18n::Backend::Base, I18n::Backend::Flatten
-      include I18n::Backend::Cache
       def initialize(store, subtrees=true)
         @store, @subtrees = store, subtrees
       end
