@@ -18,7 +18,7 @@ module CouchI18n
       if(doc.ruby_class && doc.ruby_class == 'CouchI18n::Translation') {
         emit(doc.key.split('.').slice(0, -1), 1);
       }
-    }|, type: :raw, reduce_function: :_sum
+    }|, type: :raw, reduce_function: '_sum'
 
     view :untranslated_view, key: :key, conditions: "!doc['translated']"
     view :by_value, key: :value

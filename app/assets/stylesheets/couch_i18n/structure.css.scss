@@ -1,16 +1,13 @@
 html, body{
-  margin: 0;
-  padding: 0;
 }
 body{
-  background-color: #ddf;
 }
 h1, h2, h3, h4, h5, h6{
-  margin: 0;
-  padding: 0;
 }
 h1{
-  font-size: 22px;
+}
+form{
+  margin-bottom: 0; /* bootstrap fix */
 }
 #page-wrapper{
   width: 922px;
@@ -34,9 +31,6 @@ h1{
     }
   }
 }
-tr.even{
-  background-color: #ddf;
-}
 #page-links{
   margin-top: 8px;
   margin-bottom: 8px;
@@ -49,7 +43,9 @@ tr.even{
     }
   }
 }
-
+#untranslated-label{
+  display: inline;
+}
 .offset-navigation-block{
   border-style: double;
   border-color: #444;
@@ -76,4 +72,13 @@ tr.even{
 }
 .clearing{
   clear: both;
+}
+
+.pagination{
+  ul{
+    list-style: none;
+    li{
+      float: left;
+    }
+  }
 }

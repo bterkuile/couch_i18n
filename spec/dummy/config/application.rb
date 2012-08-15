@@ -4,8 +4,10 @@ require "action_controller/railtie"
 require "action_mailer/railtie"
 require "active_resource/railtie"
 require "rails/test_unit/railtie"
+require "sprockets/railtie"
 
-Bundler.require
+Bundler.require(*Rails.groups(:assets => %w(development test)))
+#Bundler.require
 require "couch_i18n"
 
 module Dummy
