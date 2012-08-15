@@ -4,11 +4,10 @@ en:
     action:
       edit:
         title: Edit translation
+        label: Edit
       destroy:
         label: Delete
         offset_link: Delete all from offset
-      edit:
-        label: Edit
       index:
         label: Translations
         title: Translations
