@@ -29,10 +29,10 @@
       %a.btn{data: {dismiss: :modal}, href: '#'}= t('couch_i18n.general.close')
       = submit_tag I18n.t('couch_i18n.export.execute')
 .offset-navigation-block.block
-  .offset-navigation-higher
+  .btn-toolbar
     - for offset in @available_higher_offsets
-      = link_to offset[:name], :offset => offset[:offset], untranslated: params[:untranslated]
-    .clearing
+      .btn-group
+        = link_to offset[:name], {:offset => offset[:offset], untranslated: params[:untranslated]}, class: :btn
   .offset-navigation-form
     = form_tag({}, :method => :get )do
       - if params[:offset].present?
@@ -44,10 +44,10 @@
       %input{:type => :submit, :name => :valuefinder, :value => I18n.t('couch_i18n.general.find_value')}
       = check_box_tag :untranslated, 1, untranslated?, id: :untranslated_listing
       = label_tag :untranslated_listing, I18n.t('couch_i18n.general.untranslated_label'), id: 'untranslated-label'
-  .offset-navigation-deeper
+  .btn-toolbar
     - for offset in @available_deeper_offsets
-      = link_to offset[:name], :offset => offset[:offset], untranslated: params[:untranslated]
-    .clearing
+      .btn-group
+        = link_to(offset[:name], {:offset => offset[:offset], untranslated: params[:untranslated]}, class: :btn)
 - if @translations.any?
   = paginate @translations, :right => 3, :left => 3
   %table.table.table-striped

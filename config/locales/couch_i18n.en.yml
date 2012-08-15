@@ -8,6 +8,7 @@ en:
       destroy:
         label: Delete
         offset_link: Delete all from offset
+        successful: '%{model} is successfully removed'
       index:
         label: Translations
         title: Translations
@@ -15,6 +16,9 @@ en:
         label: New
       update:
         button_text: Update
+        successful: '%{model} is successfully updated'
+      create:
+        successful: '%{model} is successfully created'
     export:
       execute: Execute
       untranslated: Untranslated
@@ -29,7 +33,7 @@ en:
       find_value: Find value
       none_found: No translations found
       site_title: CouchI18n translations
-      untranslated_title: Untranslated
+      untranslated_label: Untranslated
       close: Close
     import:
       button: Import

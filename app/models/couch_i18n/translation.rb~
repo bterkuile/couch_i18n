@@ -69,9 +69,9 @@ module CouchI18n
 
     # Expire I18n when record is update
     def reload_i18n
-      Rails.cache.write("couch_i18n-#{key}", value)
-      #I18n.reload!
-      #I18n.cache_store.clear if I18n.respond_to?(:cache_store) && I18n.cache_store.respond_to?(:clear)
+      Rails.cache.write(key, value)
+      I18n.reload!
+      I18n.cache_store.clear if I18n.respond_to?(:cache_store) && I18n.cache_store.respond_to?(:clear)
     end
   end
 end
