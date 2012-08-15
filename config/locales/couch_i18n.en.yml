@@ -23,6 +23,7 @@ en:
       execute: Execute
       untranslated: Untranslated
       label: Export
+      from_offset: 'Export from offset: "%{offset}"'
     general:
       are_you_sure: 'Are you sure?'
       boolean_false: 'no'
@@ -39,6 +40,7 @@ en:
     import:
       button: Import
       label: Import
+      description: If you import keys, existing keys will be overwritten
   activemodel:
     models:
       couch_i18n:

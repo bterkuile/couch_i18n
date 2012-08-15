@@ -3,15 +3,17 @@
 - else
   - title t("couch_i18n.action.index.title")
 - content_for :navbar do
-  %a.btn{data: {toggle: "modal"}, href: ".import-form"}= t('couch_i18n.import.label')
-  %a.btn{data: {toggle: "modal"}, href: ".export-form"}= t('couch_i18n.export.label')
+  %a.btn.btn-warning{data: {toggle: "modal"}, href: ".import-form"}= t('couch_i18n.import.label')
+  %a.btn.btn-success{data: {toggle: "modal"}, href: ".export-form"}= t('couch_i18n.export.label')
   .pull-right
     = link_to t('couch_i18n.action.destroy.offset_link'), couch_i18n.destroy_offset_translations_path(:offset => params[:offset]), :method => :delete, :confirm => (defined?(:are_you_sure) ? are_you_sure : t('couch_i18n.general.are_you_sure')), class: [:btn, 'btn-danger']
 
 .modal.hide.import-form
   = form_tag({:action => :import}, :multipart => true) do
-    .modal-header= label_tag :importfile, t('couch_i18n.import.label')
+    .modal-header
+      %h3= t('couch_i18n.import.label')
     .modal-body
+      %p= t('couch_i18n.import.description')
       = file_field_tag :importfile
     .modal-footer
       %a.btn{data: {dismiss: :modal}, href: '#'}= t('couch_i18n.general.close')
@@ -20,7 +22,10 @@
   = form_tag :action => :export do
     = hidden_field_tag :offset, params[:offset]
     .modal-header
-      = label_tag :exportformat, t('couch_i18n.export.label')
+      - if params[:offset].present?
+        %h3= t('couch_i18n.export.from_offset', offset: params[:offset])
+      - else
+        %h3= t('couch_i18n.export.label')
     .modal-body
       = select_tag :exportformat, options_for_select(%w[yml csv json], params[:exportformat])
       = check_box_tag :untranslated
