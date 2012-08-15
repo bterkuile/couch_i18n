@@ -24,7 +24,7 @@
     .modal-body
       = select_tag :exportformat, options_for_select(%w[yml csv json], params[:exportformat])
       = check_box_tag :untranslated
-      = label_tag :untranslated, t('couch_i18n.export.untranslated')
+      = label_tag :untranslated, t('couch_i18n.export.untranslated'), class: 'untranslated-label'
     .modal-footer
       %a.btn{data: {dismiss: :modal}, href: '#'}= t('couch_i18n.general.close')
       = submit_tag I18n.t('couch_i18n.export.execute')
@@ -43,7 +43,7 @@
       %input{:type => :submit, :name => :partfinder, :value => I18n.t('couch_i18n.general.find_part')}
       %input{:type => :submit, :name => :valuefinder, :value => I18n.t('couch_i18n.general.find_value')}
       = check_box_tag :untranslated, 1, untranslated?, id: :untranslated_listing
-      = label_tag :untranslated_listing, I18n.t('couch_i18n.general.untranslated_label'), id: 'untranslated-label'
+      = label_tag :untranslated_listing, I18n.t('couch_i18n.general.untranslated_label'), class: 'untranslated-label'
   .btn-toolbar
     - for offset in @available_deeper_offsets
       .btn-group
