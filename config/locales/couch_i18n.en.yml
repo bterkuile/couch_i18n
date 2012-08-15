@@ -35,6 +35,7 @@ en:
       site_title: CouchI18n translations
       untranslated_label: Untranslated
       close: Close
+      is_json: 'Is JSON?'
     import:
       button: Import
       label: Import

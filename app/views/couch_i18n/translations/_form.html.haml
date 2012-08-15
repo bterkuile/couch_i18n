@@ -8,5 +8,9 @@
     = f.label :value, class: 'control-label'
     .controls
       = f.text_field :value, :size => 70, class: 'input-xxlarge'
+  .control-group
+    = label_tag :is_json, t('couch_i18n.general.is_json'), class: 'control-label'
+    .controls
+      = check_box_tag :is_json, 1, f.object.value.to_s =~ /^\{|^\[/
   .form-actions
     = f.submit @submit || update_button_text
