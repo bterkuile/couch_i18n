@@ -6,7 +6,9 @@ module CouchI18n
     private
 
     def authorize_user
-      if respond_to?(:current_user) && current_user.present? && current_user.respond_to?(:is_admin) && !current_user.is_admin.present?
+      if respond_to?(:authorize_couch_i18n)
+        authorize_couch_i18n
+      elsif respond_to?(:current_user) && current_user.present? && current_user.respond_to?(:is_admin) && !current_user.is_admin.present?
         redirect_to '/', :alert => I18n.t('couch_i18n.general.not_authorized')
       end
     end
