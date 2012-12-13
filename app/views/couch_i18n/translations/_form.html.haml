@@ -1,4 +1,5 @@
 = form_for @translation, html: {class: 'form-horizontal'} do |f|
+  = hidden_field_tag 'offset', params[:offset]
   = render 'error_messages', :target => @translation
   .control-group
     = f.label :key, class: 'control-label'
@@ -13,4 +14,4 @@
     .controls
       = check_box_tag :is_json, 1, f.object.value.to_s =~ /^\{|^\[/
   .form-actions
-    = f.submit @submit || update_button_text
+    = f.submit local_assigns[:submit] || update_button_text

@@ -25,6 +25,7 @@
     .container
       = render 'alerts'
       = yield
+      .form-actions=yield :page_links
 
     -#page-wrapper
       #page-header

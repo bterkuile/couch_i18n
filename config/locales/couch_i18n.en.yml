@@ -18,6 +18,7 @@ en:
         button_text: Update
         successful: '%{model} is successfully updated'
       create:
+        button_text: Add
         successful: '%{model} is successfully created'
     export:
       execute: Execute
