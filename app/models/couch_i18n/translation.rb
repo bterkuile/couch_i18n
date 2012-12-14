@@ -80,6 +80,20 @@ module CouchI18n
       end
     end
 
+    # Find all untranslated records having the term part as value
+    #   nl.action.one: 'Value', translated: true
+    #   en.action.two: 'Value', translated: false
+    #   en.activemodel.plural.models.user: 'Other Value', translated: false
+    # and using
+    #   find_all_untranslated_by_value('Value')
+    # will return en.action.two
+    def self.find_all_untranslated_by_value(part, options = {})
+      total_entries = database.view(untranslated_by_value(key: part, reduce: true))
+      with_pagination_options options.merge(total_entries: total_entries) do |options|
+        database.view(untranslated_by_value(options.merge(key: part, reduce: false, include_docs: true)))
+      end
+    end
+
 
     def self.untranslated(options = {})
       total_entries = database.view(untranslated_view(options.slice(:key, :keys, :startkey, :endkey).merge(reduce: true)))

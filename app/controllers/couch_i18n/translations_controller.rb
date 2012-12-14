@@ -5,9 +5,17 @@ module CouchI18n
       @available_deeper_offsets = []
       per_page = params[:per_page].presence.try(:to_i) || 30
       if params[:partfinder].present?
-        @translations = CouchI18n::Translation.find_all_by_key_part(params[:offset], page: params[:page], per_page: per_page)
+        if untranslated?
+          @translations = CouchI18n::Translation.find_all_untranslated_by_key_part(params[:offset], page: params[:page], per_page: per_page)
+        else
+          @translations = CouchI18n::Translation.find_all_by_key_part(params[:offset], page: params[:page], per_page: per_page)
+        end
       elsif params[:valuefinder].present?
-        @translations = CouchI18n::Translation.find_all_by_value(params[:offset], page: params[:page], per_page: per_page)
+        if untranslated?
+          @translations = CouchI18n::Translation.find_all_untranslated_by_value(params[:offset], page: params[:page], per_page: per_page)
+        else
+          @translations = CouchI18n::Translation.find_all_by_value(params[:offset], page: params[:page], per_page: per_page)
+        end
       else
         if params[:offset].present?
           if untranslated?
