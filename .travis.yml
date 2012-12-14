@@ -1,2 +1,6 @@
 rvm:
 - 1.9.2
+services:
+- couchdb
+before_script:
+- curl -X PUT localhost:5984/couch_i18n_dummy_test
