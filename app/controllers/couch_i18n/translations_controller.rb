@@ -10,34 +10,25 @@ module CouchI18n
         @translations = CouchI18n::Translation.find_all_by_value(params[:offset], page: params[:page], per_page: per_page)
       else
         if params[:offset].present?
-          @levels = params[:offset].split('.')
-          # Add higher levels. Do not add the last level, since it is the current one => 0..-2
-          @levels[0..-2].each_with_index do |level_name, i|
-            @available_higher_offsets << {
-              :name => level_name,
-              :offset => @levels[0..i].join('.')
-            }
-          end
           if untranslated?
             @translations = CouchI18n::Translation.untranslated_with_offset(params[:offset], :page => params[:page], :per_page => per_page)
           else
             @translations = CouchI18n::Translation.with_offset(params[:offset], :page => params[:page], :per_page => per_page)
           end
-          @available_deeper_offsets = CouchI18n::Translation.get_keys_by_level(@levels.size, :startkey => @levels, :endkey => @levels + [{}]).
-            map{|dl| {:name => dl, :offset => [params[:offset], dl].join('.')}}
         else
           if untranslated?
             @translations = CouchI18n::Translation.untranslated(:page => params[:page], :per_page => per_page)
           else
             @translations = CouchI18n::Translation.all(:page => params[:page], :per_page => per_page)
           end
-          @available_deeper_offsets = CouchI18n::Translation.get_keys_by_level(0).map{|dl| {:name => dl, :offset => dl}}
         end
+        @available_higher_offsets = CouchI18n::Translation.higher_keys_for_offset(params[:offset])
+        @available_deeper_offsets = CouchI18n::Translation.deeper_keys_for_offset(params[:offset])
       end
     end
 
     def show
-      @translation = CouchI18n::Translation.find(params[:id])
+      redirect_to action: :edit
     end
 
     def new

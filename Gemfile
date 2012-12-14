@@ -18,8 +18,8 @@ group :development do
   gem 'pry'
 end
 group :test do
-  gem 'rspec-rails'
+  gem 'pry'
+  gem 'steak'
   gem 'devise', '2.0.4'
   gem 'factory_girl_rails'
-  gem 'capybara'
 end

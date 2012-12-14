@@ -22,8 +22,18 @@ module CouchI18n
 
     view :untranslated_view, key: :key, conditions: "!doc['translated']"
     view :by_value, key: :value
+    view :untranslated_by_value, key: :value, conditions: "!doc['translated']"
     view :by_key_part, type: :custom, map_function: %|function(doc){
       if(doc.ruby_class && doc.ruby_class == 'CouchI18n::Translation') {
+        var parts = doc.key.split('.');
+        for(var i = 0; i < parts.length; i++){
+          emit(parts[i], 1);
+        }
+      }
+    }|, reduce_function: '_count'
+
+    view :untranslated_by_key_part, type: :custom, map_function: %|function(doc){
+      if(doc.ruby_class && doc.ruby_class == 'CouchI18n::Translation' && !doc.translated) {
         var parts = doc.key.split('.');
         for(var i = 0; i < parts.length; i++){
           emit(parts[i], 1);
@@ -56,8 +66,23 @@ module CouchI18n
       end
     end
 
+    # Find all untranslated records having the term part in their key
+    #   nl.action.one
+    #   en.action.two
+    #   en.activemodel.plural.models.user
+    # and using
+    #   find_all_by_part('action')
+    # will return the first two since they have action as key part
+    def self.find_all_untranslated_by_key_part(part, options = {})
+      total_entries = database.view(by_key_part(key: part, reduce: true))
+      with_pagination_options options.merge(total_entries: total_entries) do |options|
+        database.view(untranslated_by_key_part(options.merge(key: part, reduce: false, include_docs: true)))
+      end
+    end
+
+
     def self.untranslated(options = {})
-      total_entries = database.view(untranslated_view(options.select{|k,v| [:key, :keys, :startkey, :endkey].include?(k)}.merge(reduce: true)))
+      total_entries = database.view(untranslated_view(options.slice(:key, :keys, :startkey, :endkey).merge(reduce: true)))
       with_pagination_options options.merge(total_entries: total_entries) do |options|
         database.view(untranslated_view(options))
       end
@@ -72,6 +97,28 @@ module CouchI18n
       Rails.cache.write("couch_i18n-#{key}", value)
       #I18n.reload!
       #I18n.cache_store.clear if I18n.respond_to?(:cache_store) && I18n.cache_store.respond_to?(:clear)
+    end
+
+    def self.deeper_keys_for_offset( offset )
+      return get_keys_by_level(0).map{|dl| {:name => dl, :offset => dl}} unless offset.present?
+      levels = offset.split('.')
+      get_keys_by_level(levels.size, :startkey => levels, :endkey => levels + [{}]).
+            map{|dl| {:name => dl, :offset => [offset, dl].join('.')}}
+    end
+
+    def self.higher_keys_for_offset( offset )
+      return [] unless offset.present?
+      higher_keys = []
+      levels = offset.split('.')
+      return [] unless levels.size > 1
+      # Add higher levels. Do not add the last level, since it is the current one => 0..-2
+      levels[0..-2].each_with_index do |level_name, i|
+        higher_keys<< {
+          :name => level_name,
+          :offset => levels[0..i].join('.')
+        }
+      end
+      higher_keys
     end
   end
 end
