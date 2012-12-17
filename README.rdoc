@@ -1,5 +1,5 @@
 = CouchI18n
-
+{<img src="https://travis-ci.org/bterkuile/couch_i18n.png?branch=master" alt="Build Status" />}[https://travis-ci.org/bterkuile/couch_i18n]
 <b>Note this is a Rails >= 3.1 engine</b>
 
 This projects is created to make translations editable. It is created using
