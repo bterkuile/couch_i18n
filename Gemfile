@@ -17,7 +17,7 @@ group :assets do
 end
 group :development do
   gem 'pry'
-  gem 'cmtool', path: '~/companytools/development/rails/cmtool'
+  gem 'cmtool', github: 'bterkuile/cmtool'
   gem 'devise', '2.0.4'
   gem 'devise_simply_stored'
 end

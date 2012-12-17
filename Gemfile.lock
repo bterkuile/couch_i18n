@@ -1,4 +1,22 @@
 GIT
+  remote: git://github.com/bterkuile/cmtool.git
+  revision: 55efff20a87766838825bea3a0b78307ee6a4bd4
+  specs:
+    cmtool (0.5.0)
+      bourbon
+      coffee-script
+      devise (= 2.0.4)
+      devise_simply_stored
+      email_validator
+      haml-rails
+      jquery-rails
+      paperclip
+      rails (~> 3.2.2)
+      sass-rails
+      slim-rails
+      tinymce-rails
+
+GIT
   remote: git://github.com/bterkuile/couch_potato.git
   revision: ff7505c432cabfccb55cfa732a548d9449d8250c
   specs:
@@ -15,23 +33,6 @@ GIT
       activesupport
       couch_potato (>= 0.2.15)
       rest-client (>= 1.4.2)
-
-PATH
-  remote: ~/companytools/development/rails/cmtool
-  specs:
-    cmtool (0.5.0)
-      bourbon
-      coffee-script
-      devise (= 2.0.4)
-      devise_simply_stored
-      email_validator
-      haml-rails
-      jquery-rails
-      paperclip
-      rails (~> 3.2.2)
-      sass-rails
-      slim-rails
-      tinymce-rails
 
 GEM
   remote: http://rubygems.org/
