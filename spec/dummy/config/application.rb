@@ -9,6 +9,7 @@ require "sprockets/railtie"
 Bundler.require(*Rails.groups(:assets => %w(development test)))
 #Bundler.require
 require "couch_i18n"
+require 'cmtool'
 
 module Dummy
   class Application < Rails::Application

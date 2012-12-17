@@ -10,27 +10,18 @@
     %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
     = yield :head
   %body
-    .navbar.navbar-fixed-top
-      .navbar-inner
-        .container
-          %a.btn.btn-navbar{data: {toggle: "collapse", target: ".nav-collapse"}} 
-            %span.icon-bar
-            %span.icon-bar
-            %span.icon-bar
-          %a.brand{href: couch_i18n.root_path}= yield :title
-          -#.nav-collapse
-            %ul.nav
-              %li= link_to 'Clear', couch_i18n.root_path
-          = yield :navbar
+    - if defined?(Cmtool)
+      = render 'cmtool/application/menu'
+    - else
+      .navbar.navbar-fixed-top
+        .navbar-inner
+          .container
+            %a.btn.btn-navbar{data: {toggle: "collapse", target: ".nav-collapse"}} 
+              %span.icon-bar
+              %span.icon-bar
+              %span.icon-bar
+            %a.brand{href: couch_i18n.root_path}= yield :title
     .container
       = render 'alerts'
       = yield
       .form-actions=yield :page_links
-
-    -#page-wrapper
-      #page-header
-        %h1= yield :title
-      #page-content
-        = render 'alerts'
-        = yield
-        #page-links= yield :page_links

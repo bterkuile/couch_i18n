@@ -6,7 +6,8 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'factory_girl'
 require 'capybara/rspec'
-#require 'devise'
+require 'devise'
+#require 'cmtool'
 
 class CouchI18n::Translation
   def inspect

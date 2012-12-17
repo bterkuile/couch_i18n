@@ -8,6 +8,7 @@ gem 'simply_stored', :git => 'git://github.com/bterkuile/simply_stored.git'
 gem 'haml-rails'
 gem 'kaminari'
 gem 'kaminari-bootstrap'
+gem 'tinymce-rails'
 group :assets do
   gem 'bootstrap-sass'
   gem 'bourbon'
@@ -16,6 +17,9 @@ group :assets do
 end
 group :development do
   gem 'pry'
+  gem 'cmtool', path: '~/companytools/development/rails/cmtool'
+  gem 'devise', '2.0.4'
+  gem 'devise_simply_stored'
 end
 group :test do
   gem 'pry'

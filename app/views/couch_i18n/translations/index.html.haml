@@ -2,15 +2,16 @@
   - title params[:offset]
 - else
   - title t("couch_i18n.action.index.title")
-- content_for :navbar do
-  %a.btn.btn-warning{data: {toggle: "modal"}, href: ".import-form"}= t('couch_i18n.import.label')
-  %a.btn.btn-success{data: {toggle: "modal"}, href: ".export-form"}= t('couch_i18n.export.label')
+.top-buttons
+  %a.btn.btn-warning{data: {toggle: "modal"}, href: "#import-form"}= t('couch_i18n.import.label')
+  %a.btn.btn-success{data: {toggle: "modal"}, href: "#export-form"}= t('couch_i18n.export.label')
   .pull-right
     = link_to t('couch_i18n.action.destroy.offset_link'), couch_i18n.destroy_offset_translations_path(:offset => params[:offset]), :method => :delete, :confirm => (defined?(:are_you_sure) ? are_you_sure : t('couch_i18n.general.are_you_sure')), class: [:btn, 'btn-danger']
 
-.modal.hide.import-form
+#import-form.modal.hide
   = form_tag({:action => :import}, :multipart => true) do
     .modal-header
+      %button.close{:type => "button", :data => {:dismiss => "modal"}, 'aria-hidden' => "true" } x
       %h3= t('couch_i18n.import.label')
     .modal-body
       %p= t('couch_i18n.import.description')
@@ -18,10 +19,11 @@
     .modal-footer
       %a.btn{data: {dismiss: :modal}, href: '#'}= t('couch_i18n.general.close')
       = submit_tag I18n.t('couch_i18n.import.button')
-.modal.hide.export-form
+#export-form.modal.hide
   = form_tag :action => :export do
     = hidden_field_tag :offset, params[:offset]
     .modal-header
+      %button.close{:type => "button", :data => {:dismiss => "modal"}, 'aria-hidden' => "true" } x
       - if params[:offset].present?
         %h3= t('couch_i18n.export.from_offset', offset: params[:offset])
       - else

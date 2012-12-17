@@ -6,6 +6,10 @@ feature 'Translations', %q{
   I want to be able to manage translations
 } do
 
+  background do
+    CouchI18n::ApplicationController.any_instance.stub(:authorize_user).and_return true
+  end
+
   scenario 'root path should be translations index' do
     visit '/couch_i18n'
     page.should have_content 'No translations found'
