@@ -1,4 +1,13 @@
 = CHANGELOG
+
+== 0.3.0
+* Move design to Twitter bootstrap
+* Find by key part fixes
+* Find by value fixes
+* Cmtool integration support
+* Better untranslated filtering
+* Better tests
+
 == 0.2.0 (2012-04-14)
 * Allow per_page specification
 * Add find by key part option
