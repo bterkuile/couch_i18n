@@ -70,9 +70,9 @@
         %tr{:class => cycle('odd', 'even')}
           %td
             - if partfinder? || valuefinder?
-              = link_to translation.key.sub(/^\./, ''), couch_i18n.edit_translation_path(translation, offset: params[:offset])
+              = link_to translation.key.to_s.sub(/^\./, ''), couch_i18n.edit_translation_path(translation, offset: params[:offset])
             - else
-              = link_to translation.key[(params[:offset].try(:size) || 0)..-1].sub(/^\./, ''), couch_i18n.edit_translation_path(translation, offset: params[:offset])
+              = link_to translation.key.to_s[(params[:offset].try(:size) || 0)..-1].sub(/^\./, ''), couch_i18n.edit_translation_path(translation, offset: params[:offset])
           %td= link_to translation.value, couch_i18n.edit_translation_path(translation, offset: params[:offset])
           %td.boolean= boolean_show(translation.translated)
           %td.action.edit= link_to link_to_edit_content(translation), couch_i18n.edit_translation_path(translation, offset: params[:offset]), class: 'btn btn-warning'

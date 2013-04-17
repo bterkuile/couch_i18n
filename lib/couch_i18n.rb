@@ -2,6 +2,18 @@ require "couch_i18n/engine"
 require 'couch_i18n/store'
 require 'couch_i18n/backend'
 require 'couch_i18n/active_model_errors'
+
+# Ugly fix for the updated json gem changes
+module JSON
+  class << self
+    alias :old_parse :parse
+    def parse(json, args = {})
+      args[:create_additions] = true
+      old_parse(json, args)
+    end
+  end
+end
+
 module CouchI18n
   # This method imports yaml translations to the couchdb version. When run again new ones will
   # be added. Translations already stored in the couchdb database are not overwritten if true or ovveride_existing: true is given
