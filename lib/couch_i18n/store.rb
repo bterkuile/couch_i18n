@@ -9,7 +9,7 @@ module CouchI18n
     def []=(key, value, options = {})
       key = key.to_s.gsub('/', '.')
       existing = CouchI18n::Translation.find_by_key(key) rescue nil
-      translation = existing || CouchI18n::Translation.new(:key => key)
+      translation = existing || CouchI18n::Translation.new(translation_key: key)
       translation.value = value
       translation.save
     end
@@ -22,7 +22,7 @@ module CouchI18n
         begin
           set_couchrest_name CouchPotato::Config.database_name # Set database to original configured name
           translation = CouchI18n::Translation.find_by_key(key.to_s)
-          translation ||= CouchI18n::Translation.create(:key => key, :value => options[:default].presence || key.to_s.split('.').last, :translated => false)
+          translation ||= CouchI18n::Translation.create(translation_key: key, translation_value: options[:default].presence || key.to_s.split('.').last, translated: false)
         ensure
           set_couchrest_name old_database_name
         end

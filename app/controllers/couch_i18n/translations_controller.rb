@@ -44,7 +44,7 @@ module CouchI18n
     end
 
     def create
-      @translation = CouchI18n::Translation.new params[:translation]
+      @translation = CouchI18n::Translation.new translation_params
       if @translation.value.present? && params[:is_json].present?
         @translation.value = JSON.parse(@translation.value)
       end
@@ -64,10 +64,11 @@ module CouchI18n
     def update
       @translation = CouchI18n::Translation.find(params[:id])
       @translation.translated = true
-      if params[:translation]["value"].present? && params[:is_json].present?
-        params[:translation]["value"] = JSON.parse(params[:translation]["value"])
+      tparams = translation_params
+      if tparams["value"].present? && params[:is_json].present?
+        tparams["value"] = JSON.parse(tparams["value"])
       end
-      if @translation.update_attributes(params[:translation])
+      if @translation.update_attributes(tparams)
         redirect_to({:action => :index, :offset => @translation.key.to_s.sub(/\.[\w\s-]+$/, '')}, :notice => I18n.t('couch_i18n.action.update.successful', :model => CouchI18n::Translation.model_name.human))
       else
         render :action => :edit
@@ -160,5 +161,9 @@ module CouchI18n
       params[:untranslated].presence
     end
     helper_method :untranslated?
+
+    def translation_params
+      params.require(:translation).permit(:key, :value, :translated)
+    end
   end
 end

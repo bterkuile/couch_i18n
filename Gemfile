@@ -1,10 +1,10 @@
 source "http://rubygems.org"
 
-gem 'rails', '3.2.13' #     :git => 'git://github.com/rails/rails.git'
+gem 'rails', '>= 4.1.0' #     :git => 'git://github.com/rails/rails.git'
 gem 'jquery-rails'
 
-gem 'couch_potato', :git => 'git://github.com/bterkuile/couch_potato.git'
-gem 'simply_stored', :git => 'git://github.com/bterkuile/simply_stored.git'
+gem 'couch_potato' , github: 'bterkuile/couch_potato'
+gem 'simply_stored' , github: 'bterkuile/simply_stored'
 gem 'haml-rails'
 gem 'kaminari'
 gem 'kaminari-bootstrap'
@@ -17,13 +17,17 @@ group :assets do
 end
 group :development do
   gem 'pry'
+  gem 'paperclip', '3.5.2'
   gem 'cmtool', github: 'bterkuile/cmtool'
-  gem 'devise', '2.0.4'
-  gem 'devise_simply_stored'
+  gem 'devise'
+  gem 'orm_adapter', github: 'bterkuile/orm_adapter'
+  gem 'devise_simply_stored', github: 'bterkuile/devise_simply_stored'
 end
 group :test do
   gem 'pry'
   gem 'steak'
-  gem 'devise', '2.0.4'
+  gem 'devise'
+  gem 'orm_adapter', github: 'bterkuile/orm_adapter'
+  gem 'devise_simply_stored', github: 'bterkuile/devise_simply_stored'
   gem 'factory_girl_rails'
 end

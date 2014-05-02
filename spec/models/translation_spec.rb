@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe CouchI18n::Translation do
   before :each do
-    @t1 = CouchI18n::Translation.create(key: 'nl.prefix.partfinder.suffix', value: 'Value', translated: true)
-    @t2 = CouchI18n::Translation.create(key: 'nl.prefix.partfinder disabled.suffix', value: 'Value', translated: false)
-    @t3 = CouchI18n::Translation.create(key: 'en.prefix.partfinder.suffix', value: 'Value', translated: false)
+    @t1 = CouchI18n::Translation.create(translation_key: 'nl.prefix.partfinder.suffix', translation_value: 'Value', translated: true)
+    @t2 = CouchI18n::Translation.create(translation_key: 'nl.prefix.partfinder disabled.suffix', translation_value: 'Value', translated: false)
+    @t3 = CouchI18n::Translation.create(translation_key: 'en.prefix.partfinder.suffix', translation_value: 'Value', translated: false)
   end
 
   describe "find by part" do
@@ -83,8 +83,8 @@ describe CouchI18n::Translation do
 
   describe 'find by value' do
     before :each do
-      @t4 = CouchI18n::Translation.create(key: 'en.other.suffix', value: 'Other Value')
-      @t5 = CouchI18n::Translation.create(key: 'en.other.suffix.deeper_suffix', value: 'Other Value')
+      @t4 = CouchI18n::Translation.create(translation_key: 'en.other.suffix', translation_value: 'Other Value')
+      @t5 = CouchI18n::Translation.create(translation_key: 'en.other.suffix.deeper_suffix', translation_value: 'Other Value')
     end
     it "should return translations with the same value Value" do
       CouchI18n::Translation.find_all_by_value('Value').should =~ [@t1, @t2, @t3]
