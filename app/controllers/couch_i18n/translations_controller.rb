@@ -40,7 +40,7 @@ module CouchI18n
     end
 
     def new
-      @translation = CouchI18n::Translation.new :key => params[:offset]
+      @translation = CouchI18n::Translation.new translation_key: params[:offset]
     end
 
     def create
@@ -49,7 +49,7 @@ module CouchI18n
         @translation.value = JSON.parse(@translation.value)
       end
       if @translation.save
-        redirect_to({:action => :index, :offset => @translation.key.to_s.sub(/\.[\w\s-]+$/, '')}, :notice => I18n.t('couch_i18n.action.create.successful', :model => CouchI18n::Translation.model_name.human))
+        redirect_to({:action => :index, :offset => @translation.translation_key.to_s.sub(/\.[\w\s-]+$/, '')}, :notice => I18n.t('couch_i18n.action.create.successful', :model => CouchI18n::Translation.model_name.human))
       else
         render :action => :new
       end
@@ -69,7 +69,7 @@ module CouchI18n
         tparams["value"] = JSON.parse(tparams["value"])
       end
       if @translation.update_attributes(tparams)
-        redirect_to({:action => :index, :offset => @translation.key.to_s.sub(/\.[\w\s-]+$/, '')}, :notice => I18n.t('couch_i18n.action.update.successful', :model => CouchI18n::Translation.model_name.human))
+        redirect_to({:action => :index, :offset => @translation.translation_key.to_s.sub(/\.[\w\s-]+$/, '')}, :notice => I18n.t('couch_i18n.action.update.successful', :model => CouchI18n::Translation.model_name.human))
       else
         render :action => :edit
       end
@@ -80,7 +80,7 @@ module CouchI18n
       if @translation.destroy
         flash[:notice] = I18n.t('couch_i18n.action.destroy.successful', :model => CouchI18n::Translation.model_name.human)
       end
-      redirect_to({:action => :index, :offset => @translation.key.to_s.sub(/\.\w+$/, '')})
+      redirect_to({:action => :index, :offset => @translation.translation_key.to_s.sub(/\.\w+$/, '')})
     end
 
     # POST /couch_i18n/translations/export
@@ -103,12 +103,12 @@ module CouchI18n
       if params[:exportformat] == 'csv'
         response.headers['Content-Type'] = 'text/csv'
         response.headers['Content-Disposition'] = %{attachment; filename="#{base_filename}.csv"}
-        render :text => @translations.map{|s| [s.key, s.value.to_json].join(',')}.join("\n")
+        render :text => @translations.map{|s| [s.translation_key, s.translation_value.to_json].join(',')}.join("\n")
       elsif params[:exportformat] == 'json'
         response.headers['Content-Type'] = 'application/json'
         response.headers['Content-Disposition'] = %{attachment; filename="#{base_filename}.json"}
         # render :text => CouchI18n.indent_keys(@translations).to_json # for indented json
-        render :json => @translations.map{|s| {s.key => s.value}}.to_json
+        render :json => @translations.map{|s| {s.translation_key => s.translation_value}}.to_json
       else #yaml
         response.headers['Content-Type'] = 'application/x-yaml'
         response.headers['Content-Disposition'] = %{attachment; filename="#{base_filename}.yml"}
@@ -126,7 +126,7 @@ module CouchI18n
         hash = YAML.load_file(params[:importfile].tempfile.path) rescue nil
         redirect_to({:action => :index, :offset => params[:offset]}, :alert => I18n.t('couch_i18n.translation.cannot parse yaml')) and return unless hash
         CouchI18n.traverse_flatten_keys(hash).each do |key, value|
-          existing = CouchI18n::Translation.find_by_key(key)
+          existing = CouchI18n::Translation.find_by_translation_key(key)
           if existing
             if existing.value != value
               existing.value = value
@@ -134,7 +134,7 @@ module CouchI18n
               existing.save
             end
           else
-            CouchI18n::Translation.create :key => key, :value => value
+            CouchI18n::Translation.create translation_key: key, translation_value: value
           end
         end 
       else
@@ -163,7 +163,7 @@ module CouchI18n
     helper_method :untranslated?
 
     def translation_params
-      params.require(:translation).permit(:key, :value, :translated)
+      params.require(:translation).permit(:translation_key, :translation_value, :translated)
     end
   end
 end

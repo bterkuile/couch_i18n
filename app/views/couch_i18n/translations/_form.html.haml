@@ -2,13 +2,13 @@
   = hidden_field_tag 'offset', params[:offset]
   = render 'error_messages', :target => @translation
   .control-group
-    = f.label :key, class: 'control-label'
+    = f.label :translation_key, class: 'control-label'
     .controls
-      = f.text_field :key, :size => 70, class: 'input-xxlarge'
+      = f.text_field :translation_key, :size => 70, class: 'input-xxlarge'
   .control-group
-    = f.label :value, class: 'control-label'
+    = f.label :translation_value, class: 'control-label'
     .controls
-      = f.text_field :value, :size => 70, class: 'input-xxlarge'
+      = f.text_field :translation_value, :size => 70, class: 'input-xxlarge'
   .control-group
     = label_tag :is_json, t('couch_i18n.general.is_json'), class: 'control-label'
     .controls

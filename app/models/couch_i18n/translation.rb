@@ -8,15 +8,19 @@ module CouchI18n
 
     after_save :reload_i18n
 
+    def translation_key
+      id.present? ? id[3..-1] : nil
+    end
+
     def key
-      id
+      translation_key
     end
 
     view :all_documents, map_function: %|function(doc){
       if(doc.ruby_class && doc.ruby_class == 'CouchI18n::Translation') {
         emit(doc._id.substr(3), 1);
       }
-    }|, reduce_function: '_sum'
+    }|, type: :custom, reduce_function: '_sum'
     #view :by_key, :key => :key
 
     view :with_key_array, map_function: %|function(doc){
@@ -60,7 +64,18 @@ module CouchI18n
 
     # Shorthand for selecting all stored with a given offset
     def self.with_offset(offset, options = {})
-      find_all_by_translation_key("#{offset}.".."#{offset}.ZZZZZZZZZ", options)
+      key = "#{offset}.".."#{offset}.ZZZZZZZZZ"
+      total_entries = database.view(all_documents(key: key, reduce: true))
+      with_pagination_options options.merge(total_entries: total_entries) do |options|
+        database.view(all_documents(options.merge(key: key, reduce: false, include_docs: true)))
+      end
+    end
+
+    def self.all(options = {})
+      total_entries = database.view(all_documents(reduce: true))
+      with_pagination_options options.merge(total_entries: total_entries) do |options|
+        database.view(all_documents(options.merge(reduce: false, include_docs: true)))
+      end
     end
 
     def self.find_by_translation_key(key)

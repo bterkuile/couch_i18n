@@ -52,6 +52,6 @@ en:
     attributes:
       couch_i18n:
         translation:
-          key: Key
-          value: Value
+          translation_key: Key
+          translation_value: Value
           translated: 'Translated?'

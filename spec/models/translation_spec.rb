@@ -3,8 +3,31 @@ require 'spec_helper'
 describe CouchI18n::Translation do
   before :each do
     @t1 = CouchI18n::Translation.create(translation_key: 'nl.prefix.partfinder.suffix', translation_value: 'Value', translated: true)
-    @t2 = CouchI18n::Translation.create(translation_key: 'nl.prefix.partfinder disabled.suffix', translation_value: 'Value', translated: false)
+    @t2 = CouchI18n::Translation.create(translation_key: 'nl.prefix.partfinder_disabled.suffix', translation_value: 'Value', translated: false)
     @t3 = CouchI18n::Translation.create(translation_key: 'en.prefix.partfinder.suffix', translation_value: 'Value', translated: false)
+  end
+
+  describe '#translation_key' do
+    it 'Gives the proper key' do
+      CouchI18n::Translation.new(translation_key: 'nl.something').translation_key.should == 'nl.something'
+    end
+
+    it 'returns nil without key set' do
+      CouchI18n::Translation.new.translation_key.should be_nil
+    end
+  end
+
+  describe '#key' do
+    it 'calls .translation_key' do
+      CouchI18n::Translation.any_instance.should_receive(:translation_key)
+      CouchI18n::Translation.new.key
+    end
+  end
+
+  describe '.all' do
+    it 'returns all translations' do
+      CouchI18n::Translation.all(page: 1, per_page: 30).should =~ [@t1, @t2, @t3]
+    end
   end
 
   describe "find by part" do
@@ -13,6 +36,12 @@ describe CouchI18n::Translation do
     end
     it "should find all by part independent of locale that are untranslated if required" do
       CouchI18n::Translation.find_all_untranslated_by_key_part('partfinder').should == [@t3]
+    end
+  end
+
+  describe '.with_offset' do
+    it "should return nl offset translations" do
+      CouchI18n::Translation.with_offset('nl').should =~ [@t1, @t2]
     end
   end
 
@@ -41,10 +70,10 @@ describe CouchI18n::Translation do
     end
 
     it "should return the deeper offset key names when offset is given" do
-      CouchI18n::Translation.deeper_keys_for_offset('nl.prefix').map{|h| h[:name]}.should =~ [:partfinder, :'partfinder disabled']
+      CouchI18n::Translation.deeper_keys_for_offset('nl.prefix').map{|h| h[:name]}.should =~ [:partfinder, :partfinder_disabled]
     end
     it "should return the deeper offset keys with proper offset when offset is given" do
-      CouchI18n::Translation.deeper_keys_for_offset('nl.prefix').map{|h| h[:offset]}.should =~ ["nl.prefix.partfinder", "nl.prefix.partfinder disabled"]
+      CouchI18n::Translation.deeper_keys_for_offset('nl.prefix').map{|h| h[:offset]}.should =~ ["nl.prefix.partfinder", "nl.prefix.partfinder_disabled"]
     end
   end
 

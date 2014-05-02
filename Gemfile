@@ -10,7 +10,7 @@ gem 'kaminari'
 gem 'kaminari-bootstrap'
 gem 'tinymce-rails'
 group :assets do
-  gem 'bootstrap-sass'
+  gem 'bootstrap-sass', '~> 2.3'
   gem 'bourbon'
   gem 'sass-rails'
   gem 'uglifier'
