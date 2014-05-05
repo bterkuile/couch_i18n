@@ -74,11 +74,7 @@ module CouchI18n
       end
 
       def available_locales
-        locales = @store.keys.map { |k| k =~ /\./; $` }
-        locales.uniq!
-        locales.compact!
-        locales.map! { |k| k.to_sym }
-        locales
+        @available_locales ||= CouchI18n::Translation.get_translation_keys_by_level(0)
       end
 
     protected

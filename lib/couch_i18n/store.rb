@@ -42,8 +42,9 @@ module CouchI18n
       CouchPotato.database.couchrest_database.name
     end
 
+    #DISABLE THIS FUNCTIONALITY, IT KILLS PERFORMANCE
     def keys
-      CouchI18n::Translation.all.map(&:key)
+      [] #@kyes ||= CouchI18n::Translation.all.map(&:translation_key)
     end
   end
 end

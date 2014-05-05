@@ -30,13 +30,13 @@ module CouchI18n
     flattened_hash = traverse_flatten_keys(yml_backend.send(:translations))
     available_translations = CouchI18n::Translation.all
     flattened_hash.each do |key, value|
-      available_translation = available_translations.find{|t| t.key == key}
+      available_translation = available_translations.find{|t| t.translation_key == key}
       if available_translation && options[:override_existing]
-        available_translation.value = value
+        available_translation.translation_value = value
         available_translation.translated = true
         available_translation.save
       else
-        available_translation = CouchI18n::Translation.create :key => key, :value => value
+        available_translation = CouchI18n::Translation.create translation_key: key, translation_value: value
       end
     end
   end
@@ -61,7 +61,7 @@ module CouchI18n
   # by default all the translations are indented. So a command:
   #   CouchI18n.indent_keys.to_yaml will return one big yaml string of the translations
   def self.indent_keys(selection = CouchI18n::Translation.all)
-    traverse_indent_keys(selection.map{|kv| [kv.key.split('.'), kv.value]})
+    traverse_indent_keys(selection.map{|kv| [kv.translation_key.split('.'), kv.translation_value]})
   end
 
   # Traversing helper for indent_keys
@@ -79,9 +79,10 @@ module CouchI18n
   end
 
   # Add all translations to the cache to avoid one by one loading and caching
+  # TODO: do not use!!!
   def self.cache_all
     CouchI18n::Translation.all.each do |t|
-      Rails.cache.write("couch_i18n-#{t.key}", t.value)
+      Rails.cache.write("couch_i18n-#{t.translation_key}", t.translation_value)
     end
   end
 end

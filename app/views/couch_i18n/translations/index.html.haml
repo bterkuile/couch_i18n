@@ -34,7 +34,7 @@
       = label_tag :untranslated, t('couch_i18n.export.untranslated'), class: 'untranslated-label'
     .modal-footer
       %a.btn{data: {dismiss: :modal}, href: '#'}= t('couch_i18n.general.close')
-      = submit_tag I18n.t('couch_i18n.export.execute'), data: {dismiss: :modal}
+      = submit_tag I18n.t('couch_i18n.export.execute') #, data: {dismiss: :modal}
 .offset-navigation-block.block
   .btn-toolbar
     - for offset in @available_higher_offsets

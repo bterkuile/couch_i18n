@@ -128,8 +128,8 @@ module CouchI18n
         CouchI18n.traverse_flatten_keys(hash).each do |key, value|
           existing = CouchI18n::Translation.find_by_translation_key(key)
           if existing
-            if existing.value != value
-              existing.value = value
+            if existing.translation_value != value || !existing.translated?
+              existing.translation_value = value
               existing.translated = true
               existing.save
             end
