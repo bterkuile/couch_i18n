@@ -12,7 +12,7 @@ module ActiveModel
       value = (attribute != :base ? @base.send(:read_attribute_for_validation, attribute) : nil)
 
       # Create key. Remove class in model name and add errors.messages
-      key = (@base.class.model_name.underscore.sub(/\w+$/, '').scan(/\w+/) + ['errors.messages', type]).join('.')
+      key = (@base.class.model_name.to_s.underscore.sub(/\w+$/, '').scan(/\w+/) + ['errors.messages', type]).join('.')
 
       options = {
         :model => @base.class.model_name.human,
@@ -33,7 +33,7 @@ module ActiveModel
       attr_name = @base.class.human_attribute_name(attribute, :default => attr_name)
 
       # Create key. Remove class in model name and add errors.messages
-      key = (@base.class.model_name.underscore.sub(/\w+$/, '').scan(/\w+/) + ['errors.conjunction.attribute_message']).join('.')
+      key = (@base.class.model_name.to_s.underscore.sub(/\w+$/, '').scan(/\w+/) + ['errors.conjunction.attribute_message']).join('.')
       I18n.t(key, {
         :default   => "%{attribute} %{message}",
         :attribute => attr_name,
