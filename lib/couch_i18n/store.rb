@@ -8,26 +8,24 @@ module CouchI18n
     # Now the store features
     def []=(key, value, options = {})
       key = key.to_s.gsub('/', '.')
-      existing = CouchI18n::Translation.find_by_key(key) rescue nil
+      existing = CouchI18n::Translation.find_by_translation_key(key) rescue nil
       translation = existing || CouchI18n::Translation.new(translation_key: key)
-      translation.value = value
+      translation.translation_value = value
       translation.save
     end
 
     # alias for read
     def [](key, options = {})
       key = key.to_s.gsub('/', '.')
-      Rails.cache.fetch("couch_i18n-#{key}") do
-        old_database_name = get_couchrest_name
-        begin
-          set_couchrest_name CouchPotato::Config.database_name # Set database to original configured name
-          translation = CouchI18n::Translation.find_by_key(key.to_s)
-          translation ||= CouchI18n::Translation.create(translation_key: key, translation_value: options[:default].presence || key.to_s.split('.').last, translated: false)
-        ensure
-          set_couchrest_name old_database_name
-        end
-        translation.value
+      old_database_name = get_couchrest_name
+      begin
+        set_couchrest_name CouchPotato::Config.database_name # Set database to original configured name
+        translation = CouchI18n::Translation.find_by_translation_key(key.to_s)
+        translation ||= CouchI18n::Translation.create(translation_key: key, translation_value: options[:default].presence || key.to_s.split('.').last, translated: false)
+      ensure
+        set_couchrest_name old_database_name
       end
+      translation.translation_value
     end
 
     def set_couchrest_name(name)
