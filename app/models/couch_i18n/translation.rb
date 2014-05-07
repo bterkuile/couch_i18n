@@ -79,7 +79,11 @@ module CouchI18n
     end
 
     def self.find_by_translation_key(key)
-      find("t::#{key}")
+      begin
+        find("t::#{key}")
+      rescue SimplyStored::RecordNotFound
+        nil
+      end
     end
 
     # Find all records having the term part in their key
