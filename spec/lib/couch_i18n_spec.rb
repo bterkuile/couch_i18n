@@ -36,4 +36,15 @@ describe CouchI18n do
     end
 
   end
+
+  describe '.missing_key_handler' do
+    it 'allows a raising key handler' do
+      CouchI18n.missing_key do |key|
+        raise "The key #{key} cannot be found"
+      end
+      expect {
+        CouchI18n::Translation.find_by_translation_key('nl.missing')
+      }.to raise_error "The key nl.missing cannot be found"
+    end
+  end
 end

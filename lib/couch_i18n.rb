@@ -15,6 +15,7 @@ module JSON
 end
 
 module CouchI18n
+  @@__missing_key_handler = nil
   # This method imports yaml translations to the couchdb version. When run again new ones will
   # be added. Translations already stored in the couchdb database are not overwritten if true or ovveride_existing: true is given
   def self.import_from_yaml(options = {})
@@ -84,6 +85,20 @@ module CouchI18n
     CouchI18n::Translation.all.each do |t|
       Rails.cache.write("couch_i18n-#{t.translation_key}", t.translation_value)
     end
+  end
+
+  def self.handle_missing_key(key)
+    missing_key_handler.call(key) if missing_key_handler
+  end
+
+  def self.missing_key_handler
+    @@__missing_key_handler
+  end
+
+  def self.missing_key(&blk)
+    raise "Assign a block to handle a missing key" unless blk.present?
+    raise "The missing key proc should handle the key as argument CouchI18n.missing_key{ |key| .... }" unless blk.arity == 1
+    @@__missing_key_handler = blk
   end
 end
 

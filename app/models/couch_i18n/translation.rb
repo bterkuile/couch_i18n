@@ -82,6 +82,7 @@ module CouchI18n
       begin
         find("t::#{key}")
       rescue SimplyStored::RecordNotFound
+        CouchI18n.handle_missing_key(key)
         nil
       end
     end
