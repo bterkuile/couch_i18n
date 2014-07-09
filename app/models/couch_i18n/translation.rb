@@ -6,8 +6,6 @@ module CouchI18n
     property :translation_value
     property :translated, type: :boolean, default: true
 
-    after_save :reload_i18n
-
     def translation_key
       id.present? ? id[3..-1] : nil
     end
@@ -153,13 +151,6 @@ module CouchI18n
 
     def self.untranslated_with_offset(offset, options = {})
       CouchI18n::Translation.untranslated(options.merge(key: "#{offset}.".."#{offset}.ZZZZZZZZZ"))
-    end
-
-    # Expire I18n when record is update
-    def reload_i18n
-      Rails.cache.write("couch_i18n-#{key}", value)
-      #I18n.reload!
-      #I18n.cache_store.clear if I18n.respond_to?(:cache_store) && I18n.cache_store.respond_to?(:clear)
     end
 
     def self.get_keys_by_level(level = 0, options = {})

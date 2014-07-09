@@ -79,14 +79,6 @@ module CouchI18n
     h
   end
 
-  # Add all translations to the cache to avoid one by one loading and caching
-  # TODO: do not use!!!
-  def self.cache_all
-    CouchI18n::Translation.all.each do |t|
-      Rails.cache.write("couch_i18n-#{t.translation_key}", t.translation_value)
-    end
-  end
-
   def self.handle_missing_key(key)
     missing_key_handler.call(key) if missing_key_handler
   end

@@ -101,12 +101,8 @@ describe CouchI18n::Translation do
 
   describe 'it should be able to return only exact the current level' do
     before :each do
-      @t4 = CouchI18n::Translation.create(key: 'en.other.suffix', value: 'Value')
-      @t5 = CouchI18n::Translation.create(key: 'en.other.suffix.deeper_suffix', value: 'Value')
-    end
-
-    it "should be implemented" do
-      pending
+      @t4 = CouchI18n::Translation.create(translation_key: 'en.other.suffix', translation_value: 'Value')
+      @t5 = CouchI18n::Translation.create(Translation_key: 'en.other.suffix.deeper_suffix', translation_value: 'Value')
     end
   end
 

@@ -12,6 +12,6 @@
   .control-group
     = label_tag :is_json, t('couch_i18n.general.is_json'), class: 'control-label'
     .controls
-      = check_box_tag :is_json, 1, f.object.value.to_s =~ /^\{|^\[/
+      = check_box_tag :is_json, 1, f.object.translation_value.to_s =~ /^\{|^\[/
   .form-actions
     = f.submit local_assigns[:submit] || update_button_text

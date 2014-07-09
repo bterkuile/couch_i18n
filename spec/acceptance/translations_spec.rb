@@ -98,15 +98,11 @@ feature 'Translations', %q{
   end
 
   context :import do
-    scenario "import yml" do
-      pending
-    end
+    scenario "import yml"
   end
 
   context :export do
-    scenario "test export" do
-      pending
-    end
+    scenario "test export"
   end
 
 end
