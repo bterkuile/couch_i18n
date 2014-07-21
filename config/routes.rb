@@ -1,6 +1,7 @@
 CouchI18n::Engine.routes.draw do
   root :to => "translations#index"
-  resources :translations, constraints: {id: /[\w:\.]+/} do
+  # allow escaped forms (%+) and unescaped forms (: ) (note the space!!) as id
+  resources :translations, constraints: {id: /[\w:% \.\+]+/} do
     collection do
       post :export
       post :import
