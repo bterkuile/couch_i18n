@@ -13,6 +13,7 @@ en:
         label: Translations
         title: Translations
       new:
+        title: New translation
         label: New
       update:
         button_text: Update
@@ -31,6 +32,7 @@ en:
       boolean_true: 'yes'
       go_to_offset: Go to offset
       go_to_zero_offset: x
+      offset_deleted_notice: There were %{count} translations deleted having key offset %{offset}
       find_part: Find key part
       find_value: Find value
       none_found: No translations found
@@ -42,6 +44,10 @@ en:
       button: Import
       label: Import
       description: If you import keys, existing keys will be overwritten
+      notice: File imported
+      extension_not_valid: Please use the YAML file format for uploads
+      cannot_parse: The uploaded file cannot be parsed as valid translations
+      no_file_given: Please supply a file for upload
   activemodel:
     models:
       couch_i18n:

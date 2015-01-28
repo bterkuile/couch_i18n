@@ -1,4 +1,2 @@
 - title t("couch_i18n.action.edit.title")
 = render 'form'
-- content_for :page_links do
-  = link_to link_to_index_content(:translations), couch_i18n.translations_path(:offset => params[:offset] || @translation.key.to_s.sub(/\.[\w\s-]+$/, '')), class: 'btn'

@@ -1,17 +1,15 @@
 = form_for @translation, html: {class: 'form-horizontal'} do |f|
   = hidden_field_tag 'offset', params[:offset]
   = render 'error_messages', :target => @translation
-  .control-group
-    = f.label :translation_key, class: 'control-label'
-    .controls
-      = f.text_field :translation_key, :size => 70, class: 'input-xxlarge'
-  .control-group
-    = f.label :translation_value, class: 'control-label'
-    .controls
-      = f.text_field :translation_value, :size => 70, class: 'input-xxlarge'
-  .control-group
-    = label_tag :is_json, t('couch_i18n.general.is_json'), class: 'control-label'
-    .controls
-      = check_box_tag :is_json, 1, f.object.translation_value.to_s =~ /^\{|^\[/
-  .form-actions
-    = f.submit local_assigns[:submit] || update_button_text
+  .form-row
+    .form-label= f.label :translation_key, class: 'control-label'
+    .form-field.full= f.text_field :translation_key, :size => 70, class: 'input-xxlarge'
+  .form-row
+    .form-label= f.label :translation_value, class: 'control-label'
+    .form-field.full= f.text_field :translation_value, :size => 70, class: 'input-xxlarge'
+  .form-row
+    .form-label= label_tag :is_json, t('couch_i18n.general.is_json'), class: 'control-label'
+    .form-field= check_box_tag :is_json, 1, f.object.translation_value.to_s =~ /^\{|^\[/
+  .form-row: .form-actions
+    = link_to link_to_index_content(:translations), couch_i18n.translations_path(:offset => params[:offset] || @translation.key.to_s.sub(/\.[\w\s-]+$/, '')), class: 'secondary button'
+    = f.submit local_assigns[:submit] || update_button_text, class: 'button'
