@@ -11,7 +11,7 @@
 #import-form.modal.hide
   = form_tag({:action => :import}, :multipart => true) do
     .modal-header
-      button.close type="button" data-dismiss="modal" 'aria-hidden'="true" x
+      button.close type="button" data-dismiss="modal" aria-hidden=true x
       h3= t('couch_i18n.import.label')
     .modal-body
       p= t('couch_i18n.import.description')
