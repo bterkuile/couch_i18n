@@ -1,12 +1,12 @@
 source "http://rubygems.org"
 
-gem 'rails', '4.1.4' #     :git => 'git://github.com/rails/rails.git'
+gem 'rails', '~> 4.2.0' #     :git => 'git://github.com/rails/rails.git'
 gem 'couch_potato' , github: 'bterkuile/couch_potato'
 gem 'simply_stored' , github: 'bterkuile/simply_stored'
-gem 'haml-rails'
+#gem 'haml-rails'
 gem 'kaminari'
 gem 'kaminari-bootstrap', '~> 0.1.3'
-gem 'tinymce-rails'
+#gem 'tinymce-rails'
 gem 'sprockets-rails' #, '~> 2.1'
 group :assets do
   gem 'jquery-rails'
@@ -19,7 +19,7 @@ group :assets do
 end
 group :development do
   gem 'pry'
-  gem 'paperclip', '3.5.2'
+  gem 'paperclip'
   gem 'cmtool', github: 'bterkuile/cmtool'
   gem 'coffee-rails'
   gem 'devise'
