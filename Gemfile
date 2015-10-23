@@ -1,15 +1,15 @@
 source "http://rubygems.org"
 
 gem 'rails', '~> 4.2.0' #     :git => 'git://github.com/rails/rails.git'
-gem 'couch_potato' , github: 'bterkuile/couch_potato'
+#gem 'couch_potato' , github: 'bterkuile/couch_potato'
 gem 'simply_stored' , github: 'bterkuile/simply_stored'
 #gem 'haml-rails'
 gem 'kaminari'
 #gem 'tinymce-rails'
-gem 'sprockets-rails' #, '~> 2.1'
 group :assets do
   gem 'jquery-rails'
   gem 'jquery-ui-rails'
+  gem 'sprockets-rails' #, '~> 2.1'
 
   gem 'foundation-rails'
   #gem 'bourbon'
