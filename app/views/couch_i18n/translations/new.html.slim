@@ -1,4 +1,2 @@
 - title t("couch_i18n.action.new.title")
 = render 'form', submit: create_button_text
-- content_for :page_links do
-  = link_to link_to_index_content(:couch_i18n_translations), couch_i18n.translations_path(:offset => params[:offset]), class: 'btn'

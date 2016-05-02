@@ -90,7 +90,6 @@ the following yamlL
         no proper import extension: Files with extension%{extension} cannot be imported
         no import file given: There is no file to be imported
         cannot parse yaml: The file cannot be read
-        file imported: File %{filename} was successfully imported
         # The following tranlation will only work if no are_you_sure helper is present
         are you sure: 'Are you sure?'
         destroy offset link: Delete all translations with current offset

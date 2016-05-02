@@ -13,15 +13,16 @@ html
     - if defined?(Cmtool)
       = render 'cmtool/application/menu'
     - else
-      .navbar.navbar-fixed-top
-        .navbar-inner
-          .container
-            a.btn.btn-navbar data: {toggle: "collapse", target: ".nav-collapse"} 
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
-            a.brand href=couch_i18n.root_path = yield :title
+      nav.top-bar data-topbar="" role="navigation" 
+        ul.title-area
+          li.name
+            h1
+              a href=couch_i18n.root_path = yield :title
+          li.toggle-topbar.menu-icon
+            a href="#" 
+              span Menu
     .container
       = render 'alerts'
       = yield
-      .form-actions=yield :page_links
+      .row: .small-12.columns
+        .form-actions=yield :page_links

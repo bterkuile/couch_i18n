@@ -2,83 +2,90 @@
   - title params[:offset]
 - else
   - title t("couch_i18n.action.index.title")
-.top-buttons
-  a.btn.btn-warning data-toggle="modal" href="#import-form" = t('couch_i18n.import.label')
-  a.btn.btn-success data-toggle="modal" href="#export-form" = t('couch_i18n.export.label')
-  .pull-right
-    = link_to t('couch_i18n.action.destroy.offset_link'), couch_i18n.destroy_offset_translations_path(:offset => params[:offset]), :method => :delete, :confirm => (defined?(:are_you_sure) ? are_you_sure : t('couch_i18n.general.are_you_sure')), class: [:btn, 'btn-danger']
+.row.top-buttons: .small-12.columns
+  a.import-button data-reveal-id="import-modal" href="#" = t('couch_i18n.import.label')
+  a.export-button data-reveal-id="export-modal" href="#" = t('couch_i18n.export.label')
+  = link_to t('couch_i18n.action.destroy.offset_link'), couch_i18n.destroy_offset_translations_path(offset: params[:offset]), method: :delete, data: {confirm: (defined?(:are_you_sure) ? are_you_sure : t('couch_i18n.general.are_you_sure'))}, class: 'delete-all-from-offset-button'
 
-#import-form.modal.hide
-  = form_tag({:action => :import}, :multipart => true) do
+#import-modal.reveal-modal data-reveal=true
+  a.close-reveal-modal &#215
+  = form_tag({action: :import}, multipart: true) do
     .modal-header
-      button.close type="button" data-dismiss="modal" 'aria-hidden'="true" x
       h3= t('couch_i18n.import.label')
     .modal-body
       p= t('couch_i18n.import.description')
       = file_field_tag :importfile
     .modal-footer
-      a.btn data-dismiss="modal" href='#' = t('couch_i18n.general.close')
-      = submit_tag I18n.t('couch_i18n.import.button')
-#export-form.modal.hide
-  = form_tag :action => :export do
+      = submit_tag I18n.t('couch_i18n.import.button'), class: 'warning button'
+#export-modal.reveal-modal data-reveal=true
+  a.close-reveal-modal &#215
+  = form_tag action: :export do
     = hidden_field_tag :offset, params[:offset]
     .modal-header
-      button.close type="button" data-dismiss="modal" aria-hidden=true x
       - if params[:offset].present?
         h3= t('couch_i18n.export.from_offset', offset: params[:offset])
       - else
         h3= t('couch_i18n.export.label')
-    .modal-body
-      = select_tag :exportformat, options_for_select(%w[yml csv json], params[:exportformat])
-      = check_box_tag :untranslated
-      = label_tag :untranslated, t('couch_i18n.export.untranslated'), class: 'untranslated-label'
+    .row.modal-body
+      .small-6.columns= select_tag :exportformat, options_for_select(%w[yml csv json], params[:exportformat])
+      .small-6.columns
+        = check_box_tag :untranslated
+        = label_tag :untranslated, t('couch_i18n.export.untranslated'), class: 'untranslated-label'
     .modal-footer
-      a.btn data-dismiss="modal" href='#' = t('couch_i18n.general.close')
-      = submit_tag I18n.t('couch_i18n.export.execute')
+      = submit_tag I18n.t('couch_i18n.export.execute'), class: 'success button'
 .offset-navigation-block.block
-  .btn-toolbar
-    - for offset in @available_higher_offsets
-      .btn-group
-        = link_to offset[:name], {:offset => offset[:offset], untranslated: params[:untranslated]}, class: :btn
-  .offset-navigation-form
-    = form_tag({}, :method => :get )do
-      - if params[:offset].present?
-        = link_to I18n.t('couch_i18n.general.go_to_zero_offset'), :offset => nil
-      = text_field_tag :offset, params[:offset], :size => 60
-      = "(#{@translations.total_count})"
-      input type=:submit name=:commit value=I18n.t('couch_i18n.general.go_to_offset') 
-      input type=:submit name=:partfinder value=I18n.t('couch_i18n.general.find_part') 
-      input type=:submit name=:valuefinder value=I18n.t('couch_i18n.general.find_value') 
-      = check_box_tag :untranslated, 1, untranslated?, id: :untranslated_listing
-      = label_tag :untranslated_listing, I18n.t('couch_i18n.general.untranslated_label'), class: 'untranslated-label'
-  .btn-toolbar
-    - for offset in @available_deeper_offsets
-      .btn-group
-        = link_to(offset[:name], {:offset => offset[:offset], untranslated: params[:untranslated]}, class: :btn)
+  .row
+    .small-12.columns
+      ul.button-group
+        - for offset in @available_higher_offsets
+          li= link_to offset[:name], {offset: offset[:offset], untranslated: params[:untranslated]}, class: 'secondary tiny button'
+  = form_tag({}, method: :get )do
+    .row
+      .small-5.columns
+        .row.collapse
+          .small-2.columns
+            - if params[:offset].present?
+              = link_to 'x' || I18n.t('couch_i18n.general.go_to_zero_offset'), {offset: nil}, class: 'prefix button'
+          .small-10.columns= text_field_tag :offset, params[:offset], size: 60
+      .small-4.columns
+        ul.button-group
+          li: input.tiny.button type="submit" name="commit" value=I18n.t('couch_i18n.general.go_to_offset')
+          li: input.tiny.button type="submit" name="partfinder" value=I18n.t('couch_i18n.general.find_part')
+          li: input.tiny.button type="submit" name="valuefinder" value=I18n.t('couch_i18n.general.find_value')
+      .small-3.columns
+        = "(#{@translations.total_count})"
+        = check_box_tag :untranslated, 1, untranslated?, id: :untranslated_listing
+        = label_tag :untranslated_listing, I18n.t('couch_i18n.general.untranslated_label'), class: 'untranslated-label'
+  .row
+    .small-12.columns
+      ul.button-group
+        - for offset in @available_deeper_offsets
+          li= link_to offset[:name], {offset: offset[:offset], untranslated: params[:untranslated]}, class: 'secondary tiny button'
 - if @translations.any?
-  = paginate @translations, :right => 3, :left => 3
-  table.table.table-striped
-    thead
-      tr
-        th= CouchI18n::Translation.human_attribute_name(:translation_key)
-        th= CouchI18n::Translation.human_attribute_name(:translation_value)
-        th= CouchI18n::Translation.human_attribute_name(:translated)
-        th.action.edit
-        th.action.destroy
-    tbody
-      - @translations.each do |translation|
-        tr class=cycle('odd', 'even') 
-          td
-            - if partfinder? || valuefinder?
-              = link_to translation.translation_key.to_s.sub(/^\./, ''), couch_i18n.edit_translation_path(translation, offset: params[:offset])
-            - else
-              = link_to translation.translation_key.to_s[(params[:offset].try(:size) || 0)..-1].sub(/^\./, ''), couch_i18n.edit_translation_path(translation, offset: params[:offset])
-          td= link_to translation.translation_value, couch_i18n.edit_translation_path(translation, offset: params[:offset])
-          td.boolean= boolean_show(translation.translated)
-          td.action.edit= link_to link_to_edit_content(translation), couch_i18n.edit_translation_path(translation, offset: params[:offset]), class: 'btn btn-warning'
-          td.action.destroy= link_to link_to_destroy_content(translation),couch_i18n.translation_path(translation, offset: params[:offset]), :confirm => are_you_sure, :method => :delete, class: [:btn, 'btn-danger']
+  .row: .small-12.columns= paginate @translations, right: 3, left: 3, theme: 'couch_i18n'
+  .row: .small-12.columns
+    table.table.table-striped
+      thead
+        tr
+          th= CouchI18n::Translation.human_attribute_name(:translation_key)
+          th= CouchI18n::Translation.human_attribute_name(:translation_value)
+          th= CouchI18n::Translation.human_attribute_name(:translated)
+          th.action.edit
+          th.action.destroy
+      tbody
+        - @translations.each do |translation|
+          tr class=cycle('odd', 'even') 
+            td
+              - if partfinder? || valuefinder?
+                = link_to translation.translation_key.to_s.sub(/^\./, ''), couch_i18n.edit_translation_path(translation, offset: params[:offset])
+              - else
+                = link_to translation.translation_key.to_s[(params[:offset].try(:size) || 0)..-1].sub(/^\./, ''), couch_i18n.edit_translation_path(translation, offset: params[:offset])
+            td= link_to translation.translation_value, couch_i18n.edit_translation_path(translation, offset: params[:offset])
+            td.boolean= boolean_show(translation.translated)
+            td.action.edit= link_to link_to_edit_content(translation), couch_i18n.edit_translation_path(translation, offset: params[:offset]), class: 'tiny warning button'
+            td.action.destroy= link_to link_to_destroy_content(translation),couch_i18n.translation_path(translation, offset: params[:offset]), data: {confirm: are_you_sure}, method: :delete, class: 'destroy-translation-button'
 - else
-  h3= t("couch_i18n.general.none_found")
+  .row: .small-12.columns: h3= t("couch_i18n.general.none_found")
 
 - content_for :page_links do
-  = link_to link_to_new_content(:translation), couch_i18n.new_translation_path(:offset => params[:offset]), class: 'btn btn-primary'
+  = link_to link_to_new_content(:translation), couch_i18n.new_translation_path(offset: params[:offset]), class: 'button'

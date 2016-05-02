@@ -1,0 +1,45 @@
+.form-row
+  +grid-row
+  .form-label
+    @media #{$small-only}
+      +grid-column($columns:10, $center:true)
+    @media #{$medium-only}
+      +grid-column($columns:4, $offset:1)
+    @media #{$large-up}
+      +grid-column(3)
+    &.half
+      +grid-column(6)
+  .form-field
+    @media #{$small-only}
+      +grid-column($columns:10, $center:true, $last-column:true)
+    @media #{$medium-only}
+      +grid-column($columns:4, $last-column:true)
+    @media #{$large-up}
+      +grid-column($columns: 3, $last-column:true)
+    &.full
+      @media #{$small-only}
+        +grid-column($columns:10, $center:true, $last-column:true)
+      @media #{$medium-only}
+        +grid-column($columns:6, $last-column:true)
+      @media #{$large-up}
+        +grid-column($columns: 9, $last-column:true)
+    &.half
+      +grid-column(6)
+  &.form-actions
+    padding-top: 12px
+body
+  label
+    &.number
+      display: inline-block
+      padding: 4px 10px
+  input
+    &.number
+      width: 60px
+      display: inline-block
+  .apply-filter
+    +button($bg: $primary-color, $padding: $button-tny)
+  .error
+    input, textarea
+      border-color: $alert-color
+  input[type="number"]
+    text-align: right

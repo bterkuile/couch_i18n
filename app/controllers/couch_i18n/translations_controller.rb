@@ -119,12 +119,12 @@ module CouchI18n
     # POST /couch_i18n/translations/import
     # Import yml files
     def import
-      redirect_to({:action => :index, :offset => params[:offset]}, :alert => I18n.t('couch_i18n.translation.no import file given')) and return unless params[:importfile].present?
+      redirect_to({:action => :index, :offset => params[:offset]}, :alert => I18n.t('couch_i18n.import.no_file_given')) and return unless params[:importfile].present?
       filename = params[:importfile].original_filename
       extension = filename.sub(/.*\./, '')
       if extension == 'yml'
         hash = YAML.load_file(params[:importfile].tempfile.path) rescue nil
-        redirect_to({:action => :index, :offset => params[:offset]}, :alert => I18n.t('couch_i18n.translation.cannot parse yaml')) and return unless hash
+        redirect_to({:action => :index, :offset => params[:offset]}, :alert => I18n.t('couch_i18n.import.cannot_parse')) and return unless hash
         CouchI18n.traverse_flatten_keys(hash).each do |key, value|
           existing = CouchI18n::Translation.find_by_translation_key(key)
           if existing
@@ -138,9 +138,9 @@ module CouchI18n
           end
         end 
       else
-        redirect_to({:action => :index, :offset => params[:offset]}, :alert => I18n.t('couch_i18n.translation.no proper import extension', :extension => extension)) and return 
+        redirect_to({:action => :index, :offset => params[:offset]}, :alert => I18n.t('couch_i18n.import.extension_not_valid', :extension => extension)) and return 
       end
-      redirect_to({:action => :index, :offset => params[:offset]}, :notice => I18n.t('couch_i18n.translation.file imported', :filename => filename))
+      redirect_to({:action => :index, :offset => params[:offset]}, :notice => I18n.t('couch_i18n.import.notice', :filename => filename))
     end
 
     # Very dangarous action, please handle this with care, large removals are supported!
@@ -152,7 +152,7 @@ module CouchI18n
         @translations = CouchI18n::Translation.all
       end
       @translations.map(&:destroy)
-      redirect_to({:action => :index}, :notice => I18n.t('couch_i18n.translation.offset deleted', :count => @translations.size, :offset => params[:offset]))
+      redirect_to({:action => :index}, :notice => I18n.t('couch_i18n.general.offset_deleted_notice', :count => @translations.size, :offset => params[:offset]))
     end
 
     private

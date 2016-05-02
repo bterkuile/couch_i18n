@@ -5,6 +5,10 @@ module CouchI18n
 
     private
 
+    def cmtool_user
+      main_app.cmtool_user
+    end
+
     def couch_i18n_layout
       defined?(Cmtool) ? 'cmtool/application' : 'couch_i18n/application'
       # Does not integrate well with cmtool layout at the moment (2012-12-17)
