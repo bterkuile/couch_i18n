@@ -15,23 +15,26 @@ group :assets do
   #gem 'bourbon'
   gem 'sass-rails' #, '4.0.2'
   gem 'uglifier'
+  gem 'coffee-rails'
 end
+
 group :development do
-  gem 'pry-rails'
-  gem 'pry-doc'
   gem 'paperclip'
   gem 'cmtool', github: 'bterkuile/cmtool'
-  gem 'coffee-rails'
   gem 'devise'
   gem 'devise_simply_stored', github: 'bterkuile/devise_simply_stored'
   gem 'orm_adapter', github: 'bterkuile/orm_adapter'
 end
+
 group :test do
-  gem 'pry'
   gem 'steak'
-  gem 'coffee-rails'
   gem 'devise'
   gem 'orm_adapter', github: 'bterkuile/orm_adapter'
   gem 'devise_simply_stored', github: 'bterkuile/devise_simply_stored'
   gem 'factory_girl_rails'
+end
+
+group :development, :test do
+  gem 'pry-rails'
+  gem 'pry-doc'
 end
