@@ -11,11 +11,15 @@ group :assets do
   gem 'jquery-ui-rails'
   gem 'sprockets-rails' #, '~> 2.1'
 
-  gem 'foundation-rails'
+  gem 'foundation-rails', '~> 5.5'
   #gem 'bourbon'
   gem 'sass-rails' #, '4.0.2'
   gem 'uglifier'
   gem 'coffee-rails'
+  gem 'ace-rails-ap'
+  gem 'pickadate-rails'
+  gem 'font-awesome-rails'
+  gem 'tinymce-rails'
 end
 
 group :development do
