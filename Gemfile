@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 
 gem 'rails', '~> 4.2.0' #     :git => 'git://github.com/rails/rails.git'
-gem 'couch_potato' , github: 'bterkuile/couch_potato'
+#gem 'couch_potato' , github: 'bterkuile/couch_potato'
 gem 'simply_stored' , github: 'bterkuile/simply_stored'
 #gem 'haml-rails'
 gem 'kaminari'
@@ -18,7 +18,8 @@ group :assets do
   gem 'uglifier'
 end
 group :development do
-  gem 'pry'
+  gem 'pry-rails'
+  gem 'pry-doc'
   gem 'paperclip'
   gem 'cmtool', github: 'bterkuile/cmtool'
   gem 'coffee-rails'

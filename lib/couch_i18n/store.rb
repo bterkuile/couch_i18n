@@ -29,11 +29,12 @@ module CouchI18n
     end
 
     def set_couchrest_name(name)
-      d = CouchPotato.database.couchrest_database
-      d.instance_variable_set('@name', name)
-      d.instance_variable_set('@uri', "/#{name.gsub('/', '%2F')}")
-      d.instance_variable_set('@bulk_save_cache', [])
-      d.instance_variable_set('@root', d.host + d.uri)
+      #d = CouchPotato.database.couchrest_database
+      #d.instance_variable_set('@name', name)
+      #d.instance_variable_set('@uri', "/#{name.gsub('/', '%2F')}")
+      #d.instance_variable_set('@bulk_save_cache', [])
+      #d.instance_variable_set('@root', d.host + d.uri)
+      CouchPotato.class_variable_set('@@__couchrest_database', CouchRest.database(CouchPotato.full_url_to_database(name, CouchPotato::Config.database_host)))
     end
 
     def get_couchrest_name
