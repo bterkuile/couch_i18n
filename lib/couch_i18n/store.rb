@@ -11,21 +11,24 @@ module CouchI18n
       existing = CouchI18n::Translation.find_by_translation_key(key) rescue nil
       translation = existing || CouchI18n::Translation.new(translation_key: key)
       translation.translation_value = value
-      translation.save
+      translation.save and Rails.cache.write("couch_i18n-#{key}", value)
+      value
     end
 
     # alias for read
     def [](key, options = {})
       key = key.to_s.gsub('/', '.')
       old_database_name = get_couchrest_name
-      begin
-        set_couchrest_name CouchPotato::Config.database_name # Set database to original configured name
-        translation = CouchI18n::Translation.find_by_translation_key(key.to_s)
-        translation ||= CouchI18n::Translation.create(translation_key: key, translation_value: options[:default].presence || key.to_s.split('.').last, translated: false)
-      ensure
-        set_couchrest_name old_database_name
+      Rails.cache.fetch("couch_i18n-#{key}") do
+        begin
+          set_couchrest_name CouchPotato::Config.database_name # Set database to original configured name
+          translation = CouchI18n::Translation.find_by_translation_key(key.to_s)
+          translation ||= CouchI18n::Translation.create(translation_key: key, translation_value: options[:default].presence || key.to_s.split('.').last, translated: false)
+        ensure
+          set_couchrest_name old_database_name
+        end
+        translation.translation_value
       end
-      translation.translation_value
     end
 
     def set_couchrest_name(name)

@@ -36,6 +36,7 @@ RSpec.configure do |config|
 
   config.before :each do
     CouchPotato.couchrest_database.recreate!
+    Rails.cache.clear
   end
 
   config.before :all, type: :controller do
