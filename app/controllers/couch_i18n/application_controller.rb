@@ -1,6 +1,6 @@
 module CouchI18n
   class ApplicationController < ::ApplicationController
-    before_filter :authorize_user
+    before_action :authorize_user
     layout :couch_i18n_layout
 
     private

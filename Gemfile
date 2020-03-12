@@ -1,8 +1,8 @@
 source "http://rubygems.org"
 
-gem 'rails', '~> 4.2.0' #     :git => 'git://github.com/rails/rails.git'
-#gem 'couch_potato' , github: 'bterkuile/couch_potato'
-gem 'simply_stored' , github: 'bterkuile/simply_stored'
+gem 'rails', '~> 6.0.2' #     :git => 'git://github.com/rails/rails.git'
+gem 'couch_potato' , github: 'langalex/couch_potato', branch: :master
+gem 'simply_stored' , github: 'bterkuile/simply_stored', branch: :master
 #gem 'haml-rails'
 gem 'kaminari'
 #gem 'tinymce-rails'
@@ -24,17 +24,17 @@ end
 
 group :development do
   gem 'paperclip'
-  gem 'cmtool', github: 'bterkuile/cmtool'
+  gem 'cmtool', github: 'bterkuile/cmtool', branch: :master
   gem 'devise'
-  gem 'devise_simply_stored', github: 'bterkuile/devise_simply_stored'
-  gem 'orm_adapter', github: 'bterkuile/orm_adapter'
+  gem 'devise_simply_stored', github: 'bterkuile/devise_simply_stored', branch: :master
+  gem 'orm_adapter', github: 'bterkuile/orm_adapter', branch: :master
 end
 
 group :test do
   gem 'steak'
   gem 'devise'
-  gem 'orm_adapter', github: 'bterkuile/orm_adapter'
-  gem 'devise_simply_stored', github: 'bterkuile/devise_simply_stored'
+  gem 'orm_adapter', github: 'bterkuile/orm_adapter', branch: :master
+  gem 'devise_simply_stored', github: 'bterkuile/devise_simply_stored', branch: :master
   gem 'factory_girl_rails'
 end
 
