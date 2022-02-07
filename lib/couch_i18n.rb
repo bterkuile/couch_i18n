@@ -4,15 +4,15 @@ require 'couch_i18n/backend'
 require 'couch_i18n/active_model_errors'
 
 # Ugly fix for the updated json gem changes
-module JSON
-  class << self
-    alias :old_parse :parse
-    def parse(json, args = {})
-      args[:create_additions] = true
-      old_parse(json, args)
-    end
-  end
-end
+#module JSON
+#  class << self
+#    alias :old_parse :parse
+#    def parse(json, args = {})
+#      args[:create_additions] = true
+#      old_parse(json, args)
+#    end
+#  end
+#end
 
 module CouchI18n
   @@__missing_key_handler = nil

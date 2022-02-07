@@ -349,5 +349,3 @@ DEPENDENCIES
   tinymce-rails
   uglifier
 
-BUNDLED WITH
-   1.17.3

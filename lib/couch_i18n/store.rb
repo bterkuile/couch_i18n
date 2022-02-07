@@ -1,5 +1,8 @@
 module CouchI18n
   class Store
+    KNOWN_DEFAULTS = {
+      'support.array' => %({"words_connector":", ","two_words_connector":" and ","last_word_connector":", and "})
+    }
 
     def available_locales
       CouchI18n::Translation.get_keys_by_level(0)
@@ -18,12 +21,15 @@ module CouchI18n
     # alias for read
     def [](key, options = {})
       key = key.to_s.gsub('/', '.')
+      key_without_locale = key.sub(/\w+\./, '')
       old_database_name = get_couchrest_name
       Rails.cache.fetch("couch_i18n-#{key}") do
         begin
           set_couchrest_name CouchPotato::Config.database_name # Set database to original configured name
           translation = CouchI18n::Translation.find_by_translation_key(key.to_s)
-          translation ||= CouchI18n::Translation.create(translation_key: key, translation_value: options[:default].presence || key.to_s.split('.').last, translated: false)
+          translation ||= CouchI18n::Translation.create(translation_key: key, translation_value: options[:default].presence || KNOWN_DEFAULTS[key_without_locale].presence || key[/\w+$/].humanize, translated: false)
+        rescue SimplyStored::RecordNotFound
+          binding.pry
         ensure
           set_couchrest_name old_database_name
         end
@@ -31,7 +37,9 @@ module CouchI18n
       end
     end
 
-    def set_couchrest_name(name)
+    def set_couchrest_name(full_database_namename)
+      # we assume the database server is the same, just change the name
+      name = full_database_namename[/\w+$/]
       d = CouchPotato.database.couchrest_database
       d.instance_variable_set('@name', name)
       #d.instance_variable_set('@uri', "/#{name.gsub('/', '%2F')}")
