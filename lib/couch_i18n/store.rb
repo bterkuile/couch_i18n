@@ -28,12 +28,12 @@ module CouchI18n
           set_couchrest_name CouchPotato::Config.database_name # Set database to original configured name
           translation = CouchI18n::Translation.find_by_translation_key(key.to_s)
           translation ||= CouchI18n::Translation.create(translation_key: key, translation_value: options[:default].presence || KNOWN_DEFAULTS[key_without_locale].presence || key[/\w+$/].humanize, translated: false)
-        rescue SimplyStored::RecordNotFound
-          binding.pry
+        #rescue SimplyStored::RecordNotFound
+        #  binding.pry
         ensure
           set_couchrest_name old_database_name
         end
-        translation.translation_value
+        translation.try(:translation_value)
       end
     end
 
