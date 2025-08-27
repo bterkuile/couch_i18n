@@ -1,3 +1,4 @@
+require 'couch_i18n/version'
 require "couch_i18n/engine"
 require 'couch_i18n/store'
 require 'couch_i18n/backend'

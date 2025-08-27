@@ -1,7 +1,12 @@
 # Provide a simple gemspec so you can easily use your
 # project in your rails apps through git.
+$:.push File.expand_path("../lib", __FILE__)
+require 'couch_i18n/version'
+
 Gem::Specification.new do |s|
   s.name = "couch_i18n"
+  s.version = CouchI18n::VERSION
+
   s.authors = ["Benjamin ter Kuile"]
   s.email = %q{bterkuile@gmail.com}
   s.homepage = %q{http://github.com/bterkuile/couch_i18n}
